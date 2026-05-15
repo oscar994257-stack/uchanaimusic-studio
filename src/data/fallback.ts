@@ -117,5 +117,6 @@ export const fallbackData: HomeData = {
     itchUrl: 'https://uchanaimusic.itch.io',
     twitterUrl: '',
     discordUrl: ''
-  }
+  },
+  backgroundMusic: []
 }

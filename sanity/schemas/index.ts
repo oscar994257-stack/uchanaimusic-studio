@@ -7,6 +7,7 @@ import service from './service'
 import product from './product'
 import about from './about'
 import contact from './contact'
+import backgroundMusic from './backgroundMusic'
 
 export const schemaTypes = [
   siteSettings,
@@ -17,5 +18,6 @@ export const schemaTypes = [
   service,
   product,
   about,
-  contact
+  contact,
+  backgroundMusic
 ]

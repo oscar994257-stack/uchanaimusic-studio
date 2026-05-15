@@ -11,28 +11,63 @@ import {
   ExternalLink,
   Gamepad2,
   Github,
+  Languages,
   Mail,
   Mic,
   Mic2,
   Music2,
+  Pause,
   Play,
   Send,
   ShoppingCart,
+  SkipForward,
   SlidersHorizontal,
   Sparkles,
   Star,
   Tv,
   Video,
+  Volume2,
+  VolumeX,
   WandSparkles,
   Wrench,
   Youtube
 } from 'lucide-react'
-import type { HomeData, Service, ToolItem } from '@/lib/types'
-import { getYouTubeThumbnail } from '@/lib/youtube'
-import { useEffect, useMemo, useState } from 'react'
+import type { BackgroundMusicTrack, HomeData, Service, ToolItem } from '@/lib/types'
+import { extractYouTubeId, getYouTubeThumbnail } from '@/lib/youtube'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 type Props = {
   data: HomeData
+}
+
+declare global {
+  interface Window {
+    YT?: {
+      Player: new (
+        elementId: string,
+        options: {
+          videoId?: string
+          playerVars?: Record<string, number | string>
+          events?: {
+            onReady?: (event: { target: YouTubePlayer }) => void
+            onStateChange?: (event: { data: number; target: YouTubePlayer }) => void
+          }
+        }
+      ) => YouTubePlayer
+      PlayerState?: { ENDED: number }
+    }
+    onYouTubeIframeAPIReady?: () => void
+  }
+}
+
+type YouTubePlayer = {
+  loadVideoById: (videoId: string) => void
+  playVideo: () => void
+  pauseVideo: () => void
+  stopVideo: () => void
+  setVolume: (volume: number) => void
+  mute: () => void
+  unMute: () => void
 }
 
 const nav = [
@@ -45,6 +80,128 @@ const nav = [
   ['About', '#about'],
   ['Contact', '#contact']
 ]
+
+const languages = [
+  ['zh', '繁中'],
+  ['en', 'EN'],
+  ['ja', '日本語'],
+  ['ko', '한국어'],
+  ['es', 'ES'],
+  ['fr', 'FR'],
+  ['de', 'DE'],
+  ['pt', 'PT'],
+  ['th', 'ไทย'],
+  ['vi', 'VI'],
+  ['id', 'ID'],
+  ['ms', 'MS'],
+  ['ru', 'RU'],
+  ['ar', 'AR']
+] as const
+
+type LanguageCode = (typeof languages)[number][0]
+
+const copy: Record<LanguageCode, Record<string, string>> = {
+  zh: {
+    latestWorks: '最新作品',
+    worksTitle: '音樂影片、AI 歌曲與動漫世界',
+    viewAll: '看全部',
+    watchYoutube: '在 YouTube 上觀看',
+    featuredTool: '精選工具',
+    downloadNow: '立即下載',
+    viewItch: '在 itch.io 查看',
+    learnMore: '了解更多',
+    commission: '委託 / 服務',
+    servicesTitle: '夢幻般的項目製作支持',
+    tools: '工具 & Apps',
+    toolsTitle: '創作軟體與實驗工具',
+    store: '商店 / 下載',
+    storeTitle: '下載檔案由外部平台提供',
+    about: '關於',
+    aboutTitle: '個人動漫 AI 創作工作室',
+    contact: '聯絡',
+    stayUpdated: '接收更新',
+    subscribeHint: '接收最新 MV、音樂與工具資訊',
+    subscribe: '訂閱',
+    emailPlaceholder: '輸入你的 Email',
+    musicPlayer: '背景音樂',
+    play: '播放',
+    pause: '暫停',
+    next: '下一首',
+    mute: '靜音',
+    unmute: '開啟聲音',
+    language: '語言',
+    autoplayHint: '若瀏覽器阻擋自動播放，請點播放。'
+  },
+  en: {
+    latestWorks: 'Latest Works',
+    worksTitle: 'Music videos, AI songs, and anime worlds',
+    viewAll: 'View All',
+    watchYoutube: 'Watch on YouTube',
+    featuredTool: 'Featured Tool',
+    downloadNow: 'Download Now',
+    viewItch: 'View on itch.io',
+    learnMore: 'Learn More',
+    commission: 'Commission / Services',
+    servicesTitle: 'Production support for dreamlike projects',
+    tools: 'Tools & Apps',
+    toolsTitle: 'Creative software and experiments',
+    store: 'Store / Downloads',
+    storeTitle: 'Downloads live outside Vercel',
+    about: 'About',
+    aboutTitle: 'A personal anime AI studio',
+    contact: 'Contact',
+    stayUpdated: 'Stay Updated',
+    subscribeHint: 'Get the latest MV, music, and tool updates',
+    subscribe: 'Subscribe',
+    emailPlaceholder: 'Enter your email',
+    musicPlayer: 'Background Music',
+    play: 'Play',
+    pause: 'Pause',
+    next: 'Next',
+    mute: 'Mute',
+    unmute: 'Unmute',
+    language: 'Language',
+    autoplayHint: 'If autoplay is blocked, tap play.'
+  },
+  ja: {
+    latestWorks: '最新作品',
+    worksTitle: '音楽映像、AI楽曲、アニメの世界',
+    viewAll: 'すべて見る',
+    watchYoutube: 'YouTubeで見る',
+    featuredTool: '注目ツール',
+    downloadNow: '今すぐダウンロード',
+    viewItch: 'itch.ioで見る',
+    learnMore: '詳しく見る',
+    commission: '依頼 / サービス',
+    servicesTitle: '夢のような制作をサポート',
+    tools: 'ツール & Apps',
+    toolsTitle: '創作ソフトと実験ツール',
+    store: 'ストア / ダウンロード',
+    storeTitle: 'ダウンロードは外部サイトで提供',
+    about: '概要',
+    aboutTitle: '個人アニメAIスタジオ',
+    contact: '連絡先',
+    stayUpdated: '更新を受け取る',
+    subscribeHint: '最新MV・音楽・ツール情報を受け取る',
+    subscribe: '登録',
+    emailPlaceholder: 'メールを入力',
+    musicPlayer: 'BGM',
+    play: '再生',
+    pause: '停止',
+    next: '次へ',
+    mute: 'ミュート',
+    unmute: '音声オン',
+    language: '言語',
+    autoplayHint: '自動再生が止まる場合は再生を押してください。'
+  },
+  ko: {}, es: {}, fr: {}, de: {}, pt: {}, th: {}, vi: {}, id: {}, ms: {}, ru: {}, ar: {}
+} as Record<LanguageCode, Record<string, string>>
+
+const englishFallback = copy.en
+
+function text(lang: LanguageCode, key: string) {
+  return copy[lang]?.[key] || englishFallback[key] || key
+}
 
 const iconMap = {
   captions: Captions,
@@ -99,7 +256,7 @@ function MouseGlow() {
   )
 }
 
-function Navbar({ data }: Props) {
+function Navbar({ data, lang, setLang }: Props & { lang: LanguageCode; setLang: (lang: LanguageCode) => void }) {
   const [scrolled, setScrolled] = useState(false)
   const settings = data.siteSettings
 
@@ -126,6 +283,7 @@ function Navbar({ data }: Props) {
           ))}
         </div>
         <div className="flex items-center gap-2">
+          <LanguagePicker lang={lang} setLang={setLang} />
           <a aria-label="YouTube" href={settings.youtubeUrl} target="_blank" className="rounded-full p-2 text-blue-100 transition hover:bg-white/10 hover:text-cosmic-cyan">
             <Youtube className="h-5 w-5" />
           </a>
@@ -140,6 +298,27 @@ function Navbar({ data }: Props) {
         </div>
       </nav>
     </header>
+  )
+}
+
+function LanguagePicker({ lang, setLang }: { lang: LanguageCode; setLang: (lang: LanguageCode) => void }) {
+  return (
+    <label className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[.06] px-3 py-2 text-xs font-bold text-blue-100 backdrop-blur">
+      <Languages className="h-4 w-4 text-cosmic-cyan" />
+      <span className="sr-only">{text(lang, 'language')}</span>
+      <select
+        value={lang}
+        onChange={(event) => setLang(event.target.value as LanguageCode)}
+        className="bg-transparent text-blue-100 outline-none"
+        aria-label={text(lang, 'language')}
+      >
+        {languages.map(([code, label]) => (
+          <option key={code} value={code} className="bg-cosmic-ink text-white">
+            {label}
+          </option>
+        ))}
+      </select>
+    </label>
   )
 }
 
@@ -232,10 +411,10 @@ function WorkImage({ url, title }: { url?: string; title: string }) {
   return <img src={src} alt={title} onError={() => setSrc(getYouTubeThumbnail(url, 'hqdefault') || '/images/UchanAIMusic Studio.png')} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
 }
 
-function LatestWorks({ data }: Props) {
+function LatestWorks({ data, lang }: Props & { lang: LanguageCode }) {
   return (
     <MotionSection id="works" className="mx-auto max-w-7xl px-4 py-14 lg:px-8">
-      <SectionTitle kicker="Latest Works" title="Music videos, AI songs, and anime worlds" action={{ label: 'View All', href: data.siteSettings.youtubeUrl || '#' }} />
+      <SectionTitle kicker={text(lang, 'latestWorks')} title={text(lang, 'worksTitle')} action={{ label: text(lang, 'viewAll'), href: data.siteSettings.youtubeUrl || '#' }} />
       <div className="grid gap-5 md:grid-cols-3">
         {data.works.slice(0, 6).map((work) => (
           <a key={work.title} href={work.youtubeUrl} target="_blank" className="tilt-card group glass-panel aurora-border overflow-hidden rounded-2xl">
@@ -250,7 +429,7 @@ function LatestWorks({ data }: Props) {
               <p className="font-bold text-white">{work.title}</p>
               <p className="mt-1 text-sm text-blue-200/70">{work.type || work.category}</p>
               <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-cosmic-cyan">
-                Watch on YouTube <ExternalLink className="h-4 w-4" />
+                {text(lang, 'watchYoutube')} <ExternalLink className="h-4 w-4" />
               </span>
             </div>
           </a>
@@ -276,13 +455,13 @@ function SectionTitle({ kicker, title, action }: { kicker: string; title: string
   )
 }
 
-function SubtitleStudio({ data }: Props) {
+function SubtitleStudio({ data, lang }: Props & { lang: LanguageCode }) {
   const studio = data.subtitleStudio
   return (
     <MotionSection id="subtitle-studio" className="mx-auto max-w-7xl px-4 py-10 lg:px-8">
       <div className="glass-panel aurora-border grid gap-8 overflow-hidden rounded-3xl p-7 md:grid-cols-[1fr_.95fr] md:p-10">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[.22em] text-cosmic-cyan">Featured Tool</p>
+          <p className="text-sm font-bold uppercase tracking-[.22em] text-cosmic-cyan">{text(lang, 'featuredTool')}</p>
           <h2 className="mt-3 text-4xl font-black text-white">{studio.title}</h2>
           <p className="mt-3 text-lg text-blue-100/[.78]">{studio.subtitle}</p>
           <ul className="mt-7 grid gap-3 text-blue-100/[.82] sm:grid-cols-2">
@@ -292,10 +471,10 @@ function SubtitleStudio({ data }: Props) {
           </ul>
           <div className="mt-8 flex flex-wrap gap-3">
             <a href={studio.downloadUrl} target={studio.downloadUrl?.startsWith('http') ? '_blank' : undefined} className="rounded-xl bg-gradient-to-r from-cosmic-violet to-cosmic-pink px-5 py-3 font-bold text-white shadow-neon transition hover:-translate-y-1">
-              Download Now
+              {text(lang, 'downloadNow')}
             </a>
-            <a href={studio.itchUrl} target="_blank" className="rounded-xl border border-cosmic-cyan/35 px-5 py-3 font-bold text-white transition hover:bg-white/10">View on itch.io</a>
-            <a href={studio.learnMoreUrl} className="rounded-xl border border-white/15 px-5 py-3 font-bold text-white transition hover:bg-white/10">Learn More</a>
+            <a href={studio.itchUrl} target="_blank" className="rounded-xl border border-cosmic-cyan/35 px-5 py-3 font-bold text-white transition hover:bg-white/10">{text(lang, 'viewItch')}</a>
+            <a href={studio.learnMoreUrl} className="rounded-xl border border-white/15 px-5 py-3 font-bold text-white transition hover:bg-white/10">{text(lang, 'learnMore')}</a>
           </div>
         </div>
         <div className="relative min-h-[310px] overflow-hidden rounded-2xl border border-cosmic-cyan/[.24] bg-[#070d2c] p-5">
@@ -315,17 +494,17 @@ function SubtitleStudio({ data }: Props) {
   )
 }
 
-function ToolsAndServices({ data }: Props) {
+function ToolsAndServices({ data, lang }: Props & { lang: LanguageCode }) {
   return (
     <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 lg:grid-cols-2 lg:px-8">
       <MotionSection id="commission" className="glass-panel aurora-border rounded-3xl p-7">
-        <SectionTitle kicker="Commission / Services" title="Production support for dreamlike projects" />
+        <SectionTitle kicker={text(lang, 'commission')} title={text(lang, 'servicesTitle')} />
         <div className="grid gap-3">
           {data.services.map((service) => <ServiceRow key={service.serviceName} service={service} />)}
         </div>
       </MotionSection>
       <MotionSection id="tools" className="glass-panel aurora-border rounded-3xl p-7">
-        <SectionTitle kicker="Tools & Apps" title="Creative software and experiments" />
+        <SectionTitle kicker={text(lang, 'tools')} title={text(lang, 'toolsTitle')} />
         <div className="grid gap-4">
           {data.tools.map((tool) => <ToolCard key={tool.toolName} tool={tool} />)}
         </div>
@@ -366,12 +545,12 @@ function ToolCard({ tool }: { tool: ToolItem }) {
   )
 }
 
-function StoreAboutContact({ data }: Props) {
+function StoreAboutContact({ data, lang }: Props & { lang: LanguageCode }) {
   const contact = data.contact
   return (
     <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 lg:grid-cols-[1fr_.9fr] lg:px-8">
       <MotionSection id="store" className="glass-panel aurora-border rounded-3xl p-7">
-        <SectionTitle kicker="Store / Downloads" title="Downloads live outside Vercel" />
+        <SectionTitle kicker={text(lang, 'store')} title={text(lang, 'storeTitle')} />
         <div className="grid gap-4">
           {data.products.map((product) => (
             <a key={product.productName} href={product.url} target="_blank" className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/[.04] p-4 transition hover:border-cosmic-cyan/45 hover:bg-white/[.07]">
@@ -386,13 +565,13 @@ function StoreAboutContact({ data }: Props) {
         </div>
       </MotionSection>
       <MotionSection id="about" className="glass-panel aurora-border rounded-3xl p-7">
-        <SectionTitle kicker="About" title="A personal anime AI studio" />
+        <SectionTitle kicker={text(lang, 'about')} title={text(lang, 'aboutTitle')} />
         <div className="space-y-5 text-blue-100/80">
           <p>{data.about.zh}</p>
           <p>{data.about.en}</p>
         </div>
         <div id="contact" className="mt-8 rounded-2xl border border-cosmic-cyan/[.18] bg-white/[.04] p-5">
-          <p className="font-bold text-white">Contact</p>
+          <p className="font-bold text-white">{text(lang, 'contact')}</p>
           <div className="mt-4 grid gap-3 text-sm text-blue-100/75">
             <a className="flex items-center gap-3 hover:text-white" href={`mailto:${contact.email}`}><Mail className="h-4 w-4 text-cosmic-cyan" />{contact.email}</a>
             <a className="flex items-center gap-3 hover:text-white" href={contact.youtubeUrl} target="_blank"><Youtube className="h-4 w-4 text-cosmic-pink" />YouTube</a>
@@ -404,7 +583,7 @@ function StoreAboutContact({ data }: Props) {
   )
 }
 
-function Subscribe({ data }: Props) {
+function Subscribe({ data, lang }: Props & { lang: LanguageCode }) {
   return (
     <MotionSection className="mx-auto max-w-7xl px-4 py-10 lg:px-8">
       <div className="glass-panel aurora-border grid gap-6 rounded-3xl p-7 md:grid-cols-[1fr_1.1fr] md:items-center">
@@ -413,14 +592,14 @@ function Subscribe({ data }: Props) {
             <Music2 className="h-10 w-10 text-cosmic-cyan" />
           </div>
           <div>
-            <p className="text-2xl font-black text-white">Stay Updated</p>
-            <p className="mt-1 text-blue-200/70">最新のMV・音楽・ツール情報を受け取る</p>
+            <p className="text-2xl font-black text-white">{text(lang, 'stayUpdated')}</p>
+            <p className="mt-1 text-blue-200/70">{text(lang, 'subscribeHint')}</p>
           </div>
         </div>
         <form className="flex gap-3" onSubmit={(event) => event.preventDefault()}>
-          <input type="email" placeholder="Enter your email" className="min-w-0 flex-1 rounded-xl border border-cosmic-cyan/[.24] bg-cosmic-ink/70 px-4 py-3 text-white outline-none transition placeholder:text-blue-200/40 focus:border-cosmic-cyan" />
+          <input type="email" placeholder={text(lang, 'emailPlaceholder')} className="min-w-0 flex-1 rounded-xl border border-cosmic-cyan/[.24] bg-cosmic-ink/70 px-4 py-3 text-white outline-none transition placeholder:text-blue-200/40 focus:border-cosmic-cyan" />
           <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cosmic-violet to-cosmic-pink px-5 py-3 font-bold text-white shadow-neon transition hover:-translate-y-1">
-            <Send className="h-4 w-4" /> Subscribe
+            <Send className="h-4 w-4" /> {text(lang, 'subscribe')}
           </button>
         </form>
       </div>
@@ -469,17 +648,120 @@ function Footer({ data }: Props) {
   )
 }
 
+function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[]; lang: LanguageCode }) {
+  const audioTracks = tracks.filter((track) => track.audioUrl)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [index, setIndex] = useState(0)
+  const [playing, setPlaying] = useState(false)
+  const [muted, setMuted] = useState(false)
+  const [volume, setVolume] = useState(50)
+  const [blocked, setBlocked] = useState(false)
+
+  const current = audioTracks[index]
+
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio || !current?.audioUrl) return
+
+    audio.volume = volume / 100
+    audio.muted = muted
+    audio.src = current.audioUrl
+
+    audio
+      .play()
+      .then(() => {
+        setPlaying(true)
+        setBlocked(false)
+      })
+      .catch(() => {
+        setPlaying(false)
+        setBlocked(true)
+      })
+  }, [current?.audioUrl])
+
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.volume = volume / 100
+  }, [volume])
+
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.muted = muted
+  }, [muted])
+
+  if (!current) return null
+
+  const play = async () => {
+    if (!audioRef.current) return
+    try {
+      await audioRef.current.play()
+      setPlaying(true)
+      setBlocked(false)
+    } catch {
+      setBlocked(true)
+    }
+  }
+
+  const pause = () => {
+    audioRef.current?.pause()
+    setPlaying(false)
+  }
+
+  const next = () => {
+    setIndex((value) => (value + 1) % audioTracks.length)
+    setPlaying(true)
+  }
+
+  return (
+    <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-xl rounded-2xl border border-cosmic-cyan/25 bg-cosmic-ink/85 p-3 text-white shadow-neon backdrop-blur-xl md:left-auto md:mx-0 md:w-[420px]">
+      <audio ref={audioRef} onEnded={next} preload="auto" />
+      <div className="flex items-center gap-3">
+        <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-cosmic-pink/30 bg-white/[.06]">
+          <Music2 className="h-5 w-5 text-cosmic-cyan" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-bold uppercase tracking-[.18em] text-cosmic-pink">{text(lang, 'musicPlayer')}</p>
+          <p className="truncate text-sm font-bold">{current.trackTitle}</p>
+          {blocked ? <p className="mt-1 text-xs text-blue-200/65">{text(lang, 'autoplayHint')}</p> : null}
+        </div>
+        <button onClick={playing ? pause : play} className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-r from-cosmic-violet to-cosmic-pink shadow-neon" aria-label={playing ? text(lang, 'pause') : text(lang, 'play')}>
+          {playing ? <Pause className="h-5 w-5" /> : <Play className="ml-0.5 h-5 w-5 fill-white" />}
+        </button>
+        <button onClick={next} className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/[.06] text-cosmic-cyan transition hover:bg-white/10" aria-label={text(lang, 'next')}>
+          <SkipForward className="h-5 w-5" />
+        </button>
+      </div>
+      <div className="mt-3 flex items-center gap-3">
+        <button onClick={() => setMuted((value) => !value)} className="text-blue-100 transition hover:text-white" aria-label={muted ? text(lang, 'unmute') : text(lang, 'mute')}>
+          {muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+        </button>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value={volume}
+          onChange={(event) => setVolume(Number(event.target.value))}
+          className="h-1 flex-1 accent-cosmic-cyan"
+          aria-label="Volume"
+        />
+        <span className="w-10 text-right text-xs text-blue-200/70">{volume}%</span>
+      </div>
+    </div>
+  )
+}
+
 export default function HomePage({ data }: Props) {
+  const [lang, setLang] = useState<LanguageCode>('zh')
+
   return (
     <main className="relative min-h-screen overflow-hidden">
       <MouseGlow />
-      <Navbar data={data} />
+      <Navbar data={data} lang={lang} setLang={setLang} />
       <Hero data={data} />
-      <LatestWorks data={data} />
-      <SubtitleStudio data={data} />
-      <ToolsAndServices data={data} />
-      <StoreAboutContact data={data} />
-      <Subscribe data={data} />
+      <LatestWorks data={data} lang={lang} />
+      <SubtitleStudio data={data} lang={lang} />
+      <ToolsAndServices data={data} lang={lang} />
+      <StoreAboutContact data={data} lang={lang} />
+      <Subscribe data={data} lang={lang} />
+      <BackgroundMusicPlayer tracks={data.backgroundMusic} lang={lang} />
       <Footer data={data} />
     </main>
   )

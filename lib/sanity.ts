@@ -34,6 +34,14 @@ const homeQuery = `{
   },
   "about": *[_type == "about"][0],
   "contact": *[_type == "contact"][0]
+  ,
+  "backgroundMusic": *[_type == "backgroundMusic" && enabled == true] | order(coalesce(order, 999) asc) {
+    trackTitle,
+    "audioUrl": audioFile.asset->url,
+    youtubeUrl,
+    enabled,
+    order
+  }
 }`
 
 function mergeData(data?: Partial<HomeData> | null): HomeData {
@@ -46,7 +54,8 @@ function mergeData(data?: Partial<HomeData> | null): HomeData {
     services: data?.services?.length ? data.services : fallbackData.services,
     products: data?.products?.length ? data.products : fallbackData.products,
     about: { ...fallbackData.about, ...(data?.about || {}) },
-    contact: { ...fallbackData.contact, ...(data?.contact || {}) }
+    contact: { ...fallbackData.contact, ...(data?.contact || {}) },
+    backgroundMusic: data?.backgroundMusic?.length ? data.backgroundMusic : fallbackData.backgroundMusic
   }
 }
 

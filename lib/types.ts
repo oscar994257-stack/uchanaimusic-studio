@@ -76,6 +76,14 @@ export type Contact = {
   discordUrl?: string
 }
 
+export type BackgroundMusicTrack = {
+  trackTitle: string
+  audioUrl?: string
+  youtubeUrl?: string
+  enabled?: boolean
+  order?: number
+}
+
 export type HomeData = {
   siteSettings: SiteSettings
   hero: Hero
@@ -86,4 +94,5 @@ export type HomeData = {
   products: Product[]
   about: About
   contact: Contact
+  backgroundMusic: BackgroundMusicTrack[]
 }
