@@ -71,15 +71,15 @@ type YouTubePlayer = {
 }
 
 const nav = [
-  ['Home', '#home'],
-  ['Music', '#works'],
-  ['MV', '#works'],
-  ['Tools', '#tools'],
-  ['Store', '#store'],
-  ['Commission', '#commission'],
-  ['About', '#about'],
-  ['Contact', '#contact']
-]
+  ['navHome', '#home'],
+  ['navMusic', '#works'],
+  ['navMv', '#works'],
+  ['navTools', '#tools'],
+  ['navStore', '#store'],
+  ['navCommission', '#commission'],
+  ['navAbout', '#about'],
+  ['navContact', '#contact']
+] as const
 
 const languages = [
   ['zh', '繁中'],
@@ -103,6 +103,25 @@ type LanguageCode = (typeof languages)[number][0]
 const copy: Record<LanguageCode, Record<string, string>> = {
   zh: {
     latestWorks: '最新作品',
+    navHome: '首頁',
+    navMusic: '音樂',
+    navMv: 'MV',
+    navTools: '工具',
+    navStore: '商店',
+    navCommission: '委託',
+    navAbout: '關於',
+    navContact: '接觸',
+    heroBadge: 'Anime Sci-Fi AI 音樂工作室',
+    exploreWorks: '探索作品',
+    quickYoutubeSub: '頻道',
+    quickMusicSub: '串流媒體',
+    quickMvSub: '資料夾',
+    quickToolsSub: 'AI字幕工作室',
+    quickStoreSub: '下載',
+    quickContactSub: '聯絡我們',
+    footerTagline: '以 AI、音樂、動漫與科技創造夢幻世界。',
+    siteMap: '網站地圖',
+    follow: '追蹤',
     worksTitle: '音樂影片、AI 歌曲與動漫世界',
     viewAll: '看全部',
     watchYoutube: '在 YouTube 上觀看',
@@ -130,14 +149,33 @@ const copy: Record<LanguageCode, Record<string, string>> = {
     mute: '靜音',
     unmute: '開啟聲音',
     language: '語言',
-    autoplayHint: '若瀏覽器阻擋自動播放，請點播放。'
-    ,
+    autoplayHint: '自動播放被瀏覽器暫停，請點擊播放。',
     playPrompt: '點擊播放背景音樂',
-    showPlaylist: '顯示播放列表',
-    hidePlaylist: '收合播放列表'
+    nowPlaying: '正在播放背景音樂',
+    showPlaylist: '顯示播放清單',
+    hidePlaylist: '收合播放清單'
   },
   en: {
     latestWorks: 'Latest Works',
+    navHome: 'Home',
+    navMusic: 'Music',
+    navMv: 'MV',
+    navTools: 'Tools',
+    navStore: 'Store',
+    navCommission: 'Commission',
+    navAbout: 'About',
+    navContact: 'Contact',
+    heroBadge: 'Anime Sci-Fi AI Music Studio',
+    exploreWorks: 'Explore Works',
+    quickYoutubeSub: 'Channel',
+    quickMusicSub: 'Streaming',
+    quickMvSub: 'Portfolio',
+    quickToolsSub: 'AI Subtitle Studio',
+    quickStoreSub: 'Downloads',
+    quickContactSub: 'Get in Touch',
+    footerTagline: 'Creating dreamlike worlds with AI, music, anime, and technology.',
+    siteMap: 'Site Map',
+    follow: 'Follow',
     worksTitle: 'Music videos, AI songs, and anime worlds',
     viewAll: 'View All',
     watchYoutube: 'Watch on YouTube',
@@ -165,14 +203,33 @@ const copy: Record<LanguageCode, Record<string, string>> = {
     mute: 'Mute',
     unmute: 'Unmute',
     language: 'Language',
-    autoplayHint: 'If autoplay is blocked, tap play.'
-    ,
+    autoplayHint: 'If autoplay is blocked, tap play.',
     playPrompt: 'Click to play background music',
+    nowPlaying: 'Background music is playing',
     showPlaylist: 'Show playlist',
     hidePlaylist: 'Hide playlist'
   },
   ja: {
     latestWorks: '最新作品',
+    navHome: 'ホーム',
+    navMusic: '音楽',
+    navMv: 'MV',
+    navTools: 'ツール',
+    navStore: 'ストア',
+    navCommission: '依頼',
+    navAbout: '概要',
+    navContact: '連絡',
+    heroBadge: 'Anime Sci-Fi AI音楽スタジオ',
+    exploreWorks: '作品を見る',
+    quickYoutubeSub: 'チャンネル',
+    quickMusicSub: '配信',
+    quickMvSub: 'ポートフォリオ',
+    quickToolsSub: 'AI字幕スタジオ',
+    quickStoreSub: 'ダウンロード',
+    quickContactSub: 'お問い合わせ',
+    footerTagline: 'AI、音楽、アニメ、テクノロジーで夢の世界を創る。',
+    siteMap: 'サイトマップ',
+    follow: 'フォロー',
     worksTitle: '音楽映像、AI楽曲、アニメの世界',
     viewAll: 'すべて見る',
     watchYoutube: 'YouTubeで見る',
@@ -200,23 +257,606 @@ const copy: Record<LanguageCode, Record<string, string>> = {
     mute: 'ミュート',
     unmute: '音声オン',
     language: '言語',
-    autoplayHint: '自動再生が止まる場合は再生を押してください。'
-    ,
+    autoplayHint: '自動再生が止まる場合は再生を押してください。',
     playPrompt: 'クリックしてBGMを再生',
+    nowPlaying: 'BGMを再生中',
     showPlaylist: 'プレイリストを表示',
     hidePlaylist: 'プレイリストを閉じる'
   },
-  ko: { musicPlayer: '배경 음악', playPrompt: '배경 음악을 재생하려면 클릭하세요.', autoplayHint: '자동 재생이 차단되면 재생을 눌러주세요.', showPlaylist: '재생 목록 보기', hidePlaylist: '재생 목록 닫기' },
-  es: { musicPlayer: 'Música de fondo', playPrompt: 'Haz clic para reproducir la música de fondo.', autoplayHint: 'Si el navegador bloquea la reproducción automática, pulsa reproducir.', showPlaylist: 'Mostrar lista', hidePlaylist: 'Ocultar lista' },
-  fr: { musicPlayer: 'Musique de fond', playPrompt: 'Cliquez pour lancer la musique de fond.', autoplayHint: 'Si la lecture automatique est bloquée, cliquez sur lecture.', showPlaylist: 'Afficher la playlist', hidePlaylist: 'Masquer la playlist' },
-  de: { musicPlayer: 'Hintergrundmusik', playPrompt: 'Klicken, um die Hintergrundmusik abzuspielen.', autoplayHint: 'Wenn Autoplay blockiert wird, bitte Play drücken.', showPlaylist: 'Playlist anzeigen', hidePlaylist: 'Playlist ausblenden' },
-  pt: { musicPlayer: 'Música de fundo', playPrompt: 'Clique para tocar a música de fundo.', autoplayHint: 'Se a reprodução automática for bloqueada, toque em reproduzir.', showPlaylist: 'Mostrar playlist', hidePlaylist: 'Ocultar playlist' },
-  th: { musicPlayer: 'เพลงพื้นหลัง', playPrompt: 'คลิกเพื่อเล่นเพลงพื้นหลัง', autoplayHint: 'หากเบราว์เซอร์บล็อกการเล่นอัตโนมัติ ให้กดเล่น', showPlaylist: 'แสดงเพลย์ลิสต์', hidePlaylist: 'ซ่อนเพลย์ลิสต์' },
-  vi: { musicPlayer: 'Nhạc nền', playPrompt: 'Nhấn để phát nhạc nền.', autoplayHint: 'Nếu trình duyệt chặn tự phát, hãy nhấn phát.', showPlaylist: 'Hiện danh sách phát', hidePlaylist: 'Ẩn danh sách phát' },
-  id: { musicPlayer: 'Musik latar', playPrompt: 'Klik untuk memutar musik latar.', autoplayHint: 'Jika autoplay diblokir, tekan play.', showPlaylist: 'Tampilkan playlist', hidePlaylist: 'Sembunyikan playlist' },
-  ms: { musicPlayer: 'Muzik latar', playPrompt: 'Klik untuk memainkan muzik latar.', autoplayHint: 'Jika autoplay disekat, tekan play.', showPlaylist: 'Tunjuk senarai main', hidePlaylist: 'Sembunyi senarai main' },
-  ru: { musicPlayer: 'Фоновая музыка', playPrompt: 'Нажмите, чтобы включить фоновую музыку.', autoplayHint: 'Если автозапуск заблокирован, нажмите Play.', showPlaylist: 'Показать плейлист', hidePlaylist: 'Скрыть плейлист' },
-  ar: { musicPlayer: 'موسيقى الخلفية', playPrompt: 'انقر لتشغيل موسيقى الخلفية.', autoplayHint: 'إذا تم حظر التشغيل التلقائي، اضغط تشغيل.', showPlaylist: 'إظهار قائمة التشغيل', hidePlaylist: 'إخفاء قائمة التشغيل' }
+  ko: {
+    latestWorks: '최신 작품',
+    navHome: '홈',
+    navMusic: '음악',
+    navMv: 'MV',
+    navTools: '도구',
+    navStore: '스토어',
+    navCommission: '의뢰',
+    navAbout: '소개',
+    navContact: '문의',
+    heroBadge: 'Anime Sci-Fi AI 음악 스튜디오',
+    exploreWorks: '작품 보기',
+    quickYoutubeSub: '채널',
+    quickMusicSub: '스트리밍',
+    quickMvSub: '포트폴리오',
+    quickToolsSub: 'AI 자막 스튜디오',
+    quickStoreSub: '다운로드',
+    quickContactSub: '문의하기',
+    footerTagline: 'AI, 음악, 애니메이션, 기술로 꿈같은 세계를 만듭니다.',
+    siteMap: '사이트맵',
+    follow: '팔로우',
+    worksTitle: '뮤직비디오, AI 음악, 애니메이션 세계',
+    viewAll: '전체 보기',
+    watchYoutube: 'YouTube에서 보기',
+    featuredTool: '추천 도구',
+    downloadNow: '지금 다운로드',
+    viewItch: 'itch.io에서 보기',
+    learnMore: '더 알아보기',
+    commission: '의뢰 / 서비스',
+    servicesTitle: '몽환적인 프로젝트 제작 지원',
+    tools: '도구 & 앱',
+    toolsTitle: '창작 소프트웨어와 실험 도구',
+    store: '스토어 / 다운로드',
+    storeTitle: '다운로드는 외부 플랫폼에서 제공됩니다',
+    about: '소개',
+    aboutTitle: '개인 애니메이션 AI 스튜디오',
+    contact: '문의',
+    stayUpdated: '업데이트 받기',
+    subscribeHint: '최신 MV, 음악, 도구 소식을 받아보세요',
+    subscribe: '구독',
+    emailPlaceholder: '이메일을 입력하세요',
+    musicPlayer: '배경 음악',
+    play: '재생',
+    pause: '일시정지',
+    next: '다음 곡',
+    mute: '음소거',
+    unmute: '음소거 해제',
+    language: '언어',
+    autoplayHint: '자동 재생이 일시 중지되었습니다. 재생을 눌러주세요.',
+    playPrompt: '배경 음악을 재생하려면 클릭하세요.',
+    nowPlaying: '배경 음악 재생 중',
+    showPlaylist: '재생 목록 보기',
+    hidePlaylist: '재생 목록 닫기'
+  },
+  es: {
+    latestWorks: 'Trabajos recientes',
+    navHome: 'Inicio',
+    navMusic: 'Música',
+    navMv: 'MV',
+    navTools: 'Herramientas',
+    navStore: 'Tienda',
+    navCommission: 'Comisiones',
+    navAbout: 'Acerca de',
+    navContact: 'Contacto',
+    heroBadge: 'Estudio AI Music Anime Sci-Fi',
+    exploreWorks: 'Explorar obras',
+    quickYoutubeSub: 'Canal',
+    quickMusicSub: 'Streaming',
+    quickMvSub: 'Portafolio',
+    quickToolsSub: 'AI Subtitle Studio',
+    quickStoreSub: 'Descargas',
+    quickContactSub: 'Contacto',
+    footerTagline: 'Creando mundos de ensueño con AI, música, anime y tecnología.',
+    siteMap: 'Mapa del sitio',
+    follow: 'Seguir',
+    worksTitle: 'Videos musicales, canciones AI y mundos anime',
+    viewAll: 'Ver todo',
+    watchYoutube: 'Ver en YouTube',
+    featuredTool: 'Herramienta destacada',
+    downloadNow: 'Descargar ahora',
+    viewItch: 'Ver en itch.io',
+    learnMore: 'Más información',
+    commission: 'Comisiones / Servicios',
+    servicesTitle: 'Apoyo de producción para proyectos de ensueño',
+    tools: 'Herramientas y Apps',
+    toolsTitle: 'Software creativo y herramientas experimentales',
+    store: 'Tienda / Descargas',
+    storeTitle: 'Las descargas se alojan en plataformas externas',
+    about: 'Acerca de',
+    aboutTitle: 'Un estudio personal de anime e IA',
+    contact: 'Contacto',
+    stayUpdated: 'Recibe novedades',
+    subscribeHint: 'Recibe novedades de MV, música y herramientas',
+    subscribe: 'Suscribirse',
+    emailPlaceholder: 'Introduce tu email',
+    musicPlayer: 'Música de fondo',
+    play: 'Reproducir',
+    pause: 'Pausar',
+    next: 'Siguiente',
+    mute: 'Silenciar',
+    unmute: 'Activar sonido',
+    language: 'Idioma',
+    autoplayHint: 'Si el navegador bloquea la reproducción automática, pulsa reproducir.',
+    playPrompt: 'Haz clic para reproducir la música de fondo.',
+    nowPlaying: 'La música de fondo se está reproduciendo',
+    showPlaylist: 'Mostrar lista',
+    hidePlaylist: 'Ocultar lista'
+  },
+  fr: {
+    latestWorks: 'Dernières créations',
+    navHome: 'Accueil',
+    navMusic: 'Musique',
+    navMv: 'MV',
+    navTools: 'Outils',
+    navStore: 'Boutique',
+    navCommission: 'Commandes',
+    navAbout: 'À propos',
+    navContact: 'Contact',
+    heroBadge: 'Studio AI Music Anime Sci-Fi',
+    exploreWorks: 'Explorer les œuvres',
+    quickYoutubeSub: 'Chaîne',
+    quickMusicSub: 'Streaming',
+    quickMvSub: 'Portfolio',
+    quickToolsSub: 'AI Subtitle Studio',
+    quickStoreSub: 'Téléchargements',
+    quickContactSub: 'Contact',
+    footerTagline: 'Créer des mondes oniriques avec l’IA, la musique, l’anime et la technologie.',
+    siteMap: 'Plan du site',
+    follow: 'Suivre',
+    worksTitle: 'Clips musicaux, chansons IA et mondes anime',
+    viewAll: 'Tout voir',
+    watchYoutube: 'Voir sur YouTube',
+    featuredTool: 'Outil en vedette',
+    downloadNow: 'Télécharger',
+    viewItch: 'Voir sur itch.io',
+    learnMore: 'En savoir plus',
+    commission: 'Commandes / Services',
+    servicesTitle: 'Support de production pour projets oniriques',
+    tools: 'Outils & Apps',
+    toolsTitle: 'Logiciels créatifs et outils expérimentaux',
+    store: 'Boutique / Téléchargements',
+    storeTitle: 'Les téléchargements sont hébergés ailleurs',
+    about: 'À propos',
+    aboutTitle: 'Un studio personnel anime et IA',
+    contact: 'Contact',
+    stayUpdated: 'Rester informé',
+    subscribeHint: 'Recevez les nouveautés MV, musique et outils',
+    subscribe: 'S’abonner',
+    emailPlaceholder: 'Entrez votre email',
+    musicPlayer: 'Musique de fond',
+    play: 'Lire',
+    pause: 'Pause',
+    next: 'Suivant',
+    mute: 'Muet',
+    unmute: 'Activer le son',
+    language: 'Langue',
+    autoplayHint: 'Si la lecture automatique est bloquée, cliquez sur lecture.',
+    playPrompt: 'Cliquez pour lancer la musique de fond.',
+    nowPlaying: 'La musique de fond est en cours de lecture',
+    showPlaylist: 'Afficher la playlist',
+    hidePlaylist: 'Masquer la playlist'
+  },
+  de: {
+    latestWorks: 'Neueste Werke',
+    navHome: 'Start',
+    navMusic: 'Musik',
+    navMv: 'MV',
+    navTools: 'Tools',
+    navStore: 'Store',
+    navCommission: 'Aufträge',
+    navAbout: 'Über',
+    navContact: 'Kontakt',
+    heroBadge: 'Anime Sci-Fi AI Musikstudio',
+    exploreWorks: 'Werke ansehen',
+    quickYoutubeSub: 'Kanal',
+    quickMusicSub: 'Streaming',
+    quickMvSub: 'Portfolio',
+    quickToolsSub: 'AI Subtitle Studio',
+    quickStoreSub: 'Downloads',
+    quickContactSub: 'Kontakt',
+    footerTagline: 'Traumhafte Welten mit AI, Musik, Anime und Technologie erschaffen.',
+    siteMap: 'Sitemap',
+    follow: 'Folgen',
+    worksTitle: 'Musikvideos, AI-Songs und Anime-Welten',
+    viewAll: 'Alle ansehen',
+    watchYoutube: 'Auf YouTube ansehen',
+    featuredTool: 'Empfohlenes Tool',
+    downloadNow: 'Jetzt herunterladen',
+    viewItch: 'Auf itch.io ansehen',
+    learnMore: 'Mehr erfahren',
+    commission: 'Aufträge / Services',
+    servicesTitle: 'Produktionssupport für traumhafte Projekte',
+    tools: 'Tools & Apps',
+    toolsTitle: 'Kreativsoftware und experimentelle Tools',
+    store: 'Store / Downloads',
+    storeTitle: 'Downloads werden extern bereitgestellt',
+    about: 'Über',
+    aboutTitle: 'Ein persönliches Anime-AI-Studio',
+    contact: 'Kontakt',
+    stayUpdated: 'Updates erhalten',
+    subscribeHint: 'Erhalte neue MV-, Musik- und Tool-Updates',
+    subscribe: 'Abonnieren',
+    emailPlaceholder: 'E-Mail eingeben',
+    musicPlayer: 'Hintergrundmusik',
+    play: 'Abspielen',
+    pause: 'Pause',
+    next: 'Weiter',
+    mute: 'Stumm',
+    unmute: 'Ton an',
+    language: 'Sprache',
+    autoplayHint: 'Wenn Autoplay blockiert wird, bitte Play drücken.',
+    playPrompt: 'Klicken, um die Hintergrundmusik abzuspielen.',
+    nowPlaying: 'Hintergrundmusik läuft',
+    showPlaylist: 'Playlist anzeigen',
+    hidePlaylist: 'Playlist ausblenden'
+  },
+  pt: {
+    latestWorks: 'Últimos trabalhos',
+    navHome: 'Início',
+    navMusic: 'Música',
+    navMv: 'MV',
+    navTools: 'Ferramentas',
+    navStore: 'Loja',
+    navCommission: 'Comissões',
+    navAbout: 'Sobre',
+    navContact: 'Contato',
+    heroBadge: 'Estúdio AI Music Anime Sci-Fi',
+    exploreWorks: 'Explorar obras',
+    quickYoutubeSub: 'Canal',
+    quickMusicSub: 'Streaming',
+    quickMvSub: 'Portfólio',
+    quickToolsSub: 'AI Subtitle Studio',
+    quickStoreSub: 'Downloads',
+    quickContactSub: 'Contato',
+    footerTagline: 'Criando mundos oníricos com AI, música, anime e tecnologia.',
+    siteMap: 'Mapa do site',
+    follow: 'Seguir',
+    worksTitle: 'Videoclipes, músicas AI e mundos anime',
+    viewAll: 'Ver tudo',
+    watchYoutube: 'Ver no YouTube',
+    featuredTool: 'Ferramenta em destaque',
+    downloadNow: 'Baixar agora',
+    viewItch: 'Ver no itch.io',
+    learnMore: 'Saiba mais',
+    commission: 'Comissões / Serviços',
+    servicesTitle: 'Suporte de produção para projetos oníricos',
+    tools: 'Ferramentas & Apps',
+    toolsTitle: 'Software criativo e ferramentas experimentais',
+    store: 'Loja / Downloads',
+    storeTitle: 'Downloads hospedados em plataformas externas',
+    about: 'Sobre',
+    aboutTitle: 'Um estúdio pessoal de anime e AI',
+    contact: 'Contato',
+    stayUpdated: 'Receber novidades',
+    subscribeHint: 'Receba novidades de MV, música e ferramentas',
+    subscribe: 'Inscrever-se',
+    emailPlaceholder: 'Digite seu email',
+    musicPlayer: 'Música de fundo',
+    play: 'Reproduzir',
+    pause: 'Pausar',
+    next: 'Próxima',
+    mute: 'Silenciar',
+    unmute: 'Ativar som',
+    language: 'Idioma',
+    autoplayHint: 'Se a reprodução automática for bloqueada, toque em reproduzir.',
+    playPrompt: 'Clique para tocar a música de fundo.',
+    nowPlaying: 'Música de fundo tocando',
+    showPlaylist: 'Mostrar playlist',
+    hidePlaylist: 'Ocultar playlist'
+  },
+  th: {
+    latestWorks: 'ผลงานล่าสุด',
+    navHome: 'หน้าแรก',
+    navMusic: 'เพลง',
+    navMv: 'MV',
+    navTools: 'เครื่องมือ',
+    navStore: 'ร้านค้า',
+    navCommission: 'คอมมิชชัน',
+    navAbout: 'เกี่ยวกับ',
+    navContact: 'ติดต่อ',
+    heroBadge: 'สตูดิโอ AI Music Anime Sci-Fi',
+    exploreWorks: 'ดูผลงาน',
+    quickYoutubeSub: 'ช่อง',
+    quickMusicSub: 'สตรีมมิง',
+    quickMvSub: 'พอร์ตโฟลิโอ',
+    quickToolsSub: 'AI Subtitle Studio',
+    quickStoreSub: 'ดาวน์โหลด',
+    quickContactSub: 'ติดต่อเรา',
+    footerTagline: 'สร้างโลกในฝันด้วย AI เพลง อนิเมะ และเทคโนโลยี',
+    siteMap: 'แผนผังเว็บไซต์',
+    follow: 'ติดตาม',
+    worksTitle: 'มิวสิกวิดีโอ เพลง AI และโลกอนิเมะ',
+    viewAll: 'ดูทั้งหมด',
+    watchYoutube: 'ดูบน YouTube',
+    featuredTool: 'เครื่องมือแนะนำ',
+    downloadNow: 'ดาวน์โหลด',
+    viewItch: 'ดูบน itch.io',
+    learnMore: 'เรียนรู้เพิ่มเติม',
+    commission: 'คอมมิชชัน / บริการ',
+    servicesTitle: 'สนับสนุนการผลิตโปรเจกต์ในฝัน',
+    tools: 'เครื่องมือ & แอป',
+    toolsTitle: 'ซอฟต์แวร์สร้างสรรค์และเครื่องมือทดลอง',
+    store: 'ร้านค้า / ดาวน์โหลด',
+    storeTitle: 'ไฟล์ดาวน์โหลดอยู่บนแพลตฟอร์มภายนอก',
+    about: 'เกี่ยวกับ',
+    aboutTitle: 'สตูดิโออนิเมะ AI ส่วนตัว',
+    contact: 'ติดต่อ',
+    stayUpdated: 'รับข่าวสาร',
+    subscribeHint: 'รับข่าว MV เพลง และเครื่องมือล่าสุด',
+    subscribe: 'สมัครรับข่าว',
+    emailPlaceholder: 'กรอกอีเมลของคุณ',
+    musicPlayer: 'เพลงพื้นหลัง',
+    play: 'เล่น',
+    pause: 'หยุดชั่วคราว',
+    next: 'เพลงถัดไป',
+    mute: 'ปิดเสียง',
+    unmute: 'เปิดเสียง',
+    language: 'ภาษา',
+    autoplayHint: 'หากเบราว์เซอร์บล็อกการเล่นอัตโนมัติ ให้กดเล่น',
+    playPrompt: 'คลิกเพื่อเล่นเพลงพื้นหลัง',
+    nowPlaying: 'กำลังเล่นเพลงพื้นหลัง',
+    showPlaylist: 'แสดงเพลย์ลิสต์',
+    hidePlaylist: 'ซ่อนเพลย์ลิสต์'
+  },
+  vi: {
+    latestWorks: 'Tác phẩm mới nhất',
+    navHome: 'Trang chủ',
+    navMusic: 'Âm nhạc',
+    navMv: 'MV',
+    navTools: 'Công cụ',
+    navStore: 'Cửa hàng',
+    navCommission: 'Đặt hàng',
+    navAbout: 'Giới thiệu',
+    navContact: 'Liên hệ',
+    heroBadge: 'Studio AI Music Anime Sci-Fi',
+    exploreWorks: 'Khám phá tác phẩm',
+    quickYoutubeSub: 'Kênh',
+    quickMusicSub: 'Streaming',
+    quickMvSub: 'Portfolio',
+    quickToolsSub: 'AI Subtitle Studio',
+    quickStoreSub: 'Tải xuống',
+    quickContactSub: 'Liên hệ',
+    footerTagline: 'Tạo nên thế giới mộng ảo bằng AI, âm nhạc, anime và công nghệ.',
+    siteMap: 'Sơ đồ trang',
+    follow: 'Theo dõi',
+    worksTitle: 'MV âm nhạc, bài hát AI và thế giới anime',
+    viewAll: 'Xem tất cả',
+    watchYoutube: 'Xem trên YouTube',
+    featuredTool: 'Công cụ nổi bật',
+    downloadNow: 'Tải xuống',
+    viewItch: 'Xem trên itch.io',
+    learnMore: 'Tìm hiểu thêm',
+    commission: 'Đặt hàng / Dịch vụ',
+    servicesTitle: 'Hỗ trợ sản xuất cho dự án mộng ảo',
+    tools: 'Công cụ & Apps',
+    toolsTitle: 'Phần mềm sáng tạo và công cụ thử nghiệm',
+    store: 'Cửa hàng / Tải xuống',
+    storeTitle: 'Tệp tải xuống được lưu trên nền tảng ngoài',
+    about: 'Giới thiệu',
+    aboutTitle: 'Studio anime AI cá nhân',
+    contact: 'Liên hệ',
+    stayUpdated: 'Nhận cập nhật',
+    subscribeHint: 'Nhận tin mới về MV, âm nhạc và công cụ',
+    subscribe: 'Đăng ký',
+    emailPlaceholder: 'Nhập email của bạn',
+    musicPlayer: 'Nhạc nền',
+    play: 'Phát',
+    pause: 'Tạm dừng',
+    next: 'Bài tiếp',
+    mute: 'Tắt tiếng',
+    unmute: 'Bật tiếng',
+    language: 'Ngôn ngữ',
+    autoplayHint: 'Nếu trình duyệt chặn tự phát, hãy nhấn phát.',
+    playPrompt: 'Nhấn để phát nhạc nền.',
+    nowPlaying: 'Đang phát nhạc nền',
+    showPlaylist: 'Hiện danh sách phát',
+    hidePlaylist: 'Ẩn danh sách phát'
+  },
+  id: {
+    latestWorks: 'Karya terbaru',
+    navHome: 'Beranda',
+    navMusic: 'Musik',
+    navMv: 'MV',
+    navTools: 'Alat',
+    navStore: 'Toko',
+    navCommission: 'Komisi',
+    navAbout: 'Tentang',
+    navContact: 'Kontak',
+    heroBadge: 'Studio AI Music Anime Sci-Fi',
+    exploreWorks: 'Jelajahi karya',
+    quickYoutubeSub: 'Kanal',
+    quickMusicSub: 'Streaming',
+    quickMvSub: 'Portofolio',
+    quickToolsSub: 'AI Subtitle Studio',
+    quickStoreSub: 'Unduhan',
+    quickContactSub: 'Hubungi',
+    footerTagline: 'Menciptakan dunia impian dengan AI, musik, anime, dan teknologi.',
+    siteMap: 'Peta situs',
+    follow: 'Ikuti',
+    worksTitle: 'Video musik, lagu AI, dan dunia anime',
+    viewAll: 'Lihat semua',
+    watchYoutube: 'Tonton di YouTube',
+    featuredTool: 'Alat unggulan',
+    downloadNow: 'Unduh sekarang',
+    viewItch: 'Lihat di itch.io',
+    learnMore: 'Pelajari lagi',
+    commission: 'Komisi / Layanan',
+    servicesTitle: 'Dukungan produksi untuk proyek impian',
+    tools: 'Alat & Apps',
+    toolsTitle: 'Perangkat kreatif dan alat eksperimen',
+    store: 'Toko / Unduhan',
+    storeTitle: 'Unduhan disediakan di platform eksternal',
+    about: 'Tentang',
+    aboutTitle: 'Studio anime AI pribadi',
+    contact: 'Kontak',
+    stayUpdated: 'Dapatkan kabar',
+    subscribeHint: 'Dapatkan info MV, musik, dan alat terbaru',
+    subscribe: 'Berlangganan',
+    emailPlaceholder: 'Masukkan email',
+    musicPlayer: 'Musik latar',
+    play: 'Putar',
+    pause: 'Jeda',
+    next: 'Berikutnya',
+    mute: 'Bisukan',
+    unmute: 'Nyalakan suara',
+    language: 'Bahasa',
+    autoplayHint: 'Jika autoplay diblokir, tekan play.',
+    playPrompt: 'Klik untuk memutar musik latar.',
+    nowPlaying: 'Musik latar sedang diputar',
+    showPlaylist: 'Tampilkan playlist',
+    hidePlaylist: 'Sembunyikan playlist'
+  },
+  ms: {
+    latestWorks: 'Karya terkini',
+    navHome: 'Laman utama',
+    navMusic: 'Muzik',
+    navMv: 'MV',
+    navTools: 'Alat',
+    navStore: 'Kedai',
+    navCommission: 'Tempahan',
+    navAbout: 'Tentang',
+    navContact: 'Hubungi',
+    heroBadge: 'Studio AI Music Anime Sci-Fi',
+    exploreWorks: 'Teroka karya',
+    quickYoutubeSub: 'Saluran',
+    quickMusicSub: 'Streaming',
+    quickMvSub: 'Portfolio',
+    quickToolsSub: 'AI Subtitle Studio',
+    quickStoreSub: 'Muat turun',
+    quickContactSub: 'Hubungi',
+    footerTagline: 'Mencipta dunia impian dengan AI, muzik, anime dan teknologi.',
+    siteMap: 'Peta laman',
+    follow: 'Ikuti',
+    worksTitle: 'Video muzik, lagu AI dan dunia anime',
+    viewAll: 'Lihat semua',
+    watchYoutube: 'Tonton di YouTube',
+    featuredTool: 'Alat pilihan',
+    downloadNow: 'Muat turun',
+    viewItch: 'Lihat di itch.io',
+    learnMore: 'Ketahui lanjut',
+    commission: 'Tempahan / Servis',
+    servicesTitle: 'Sokongan produksi untuk projek impian',
+    tools: 'Alat & Apps',
+    toolsTitle: 'Perisian kreatif dan alat eksperimen',
+    store: 'Kedai / Muat turun',
+    storeTitle: 'Muat turun disediakan di platform luar',
+    about: 'Tentang',
+    aboutTitle: 'Studio anime AI peribadi',
+    contact: 'Hubungi',
+    stayUpdated: 'Terima kemas kini',
+    subscribeHint: 'Terima kemas kini MV, muzik dan alat terbaru',
+    subscribe: 'Langgan',
+    emailPlaceholder: 'Masukkan email anda',
+    musicPlayer: 'Muzik latar',
+    play: 'Main',
+    pause: 'Jeda',
+    next: 'Seterusnya',
+    mute: 'Senyap',
+    unmute: 'Buka suara',
+    language: 'Bahasa',
+    autoplayHint: 'Jika autoplay disekat, tekan play.',
+    playPrompt: 'Klik untuk memainkan muzik latar.',
+    nowPlaying: 'Muzik latar sedang dimainkan',
+    showPlaylist: 'Tunjuk senarai main',
+    hidePlaylist: 'Sembunyi senarai main'
+  },
+  ru: {
+    latestWorks: 'Новые работы',
+    navHome: 'Главная',
+    navMusic: 'Музыка',
+    navMv: 'MV',
+    navTools: 'Инструменты',
+    navStore: 'Магазин',
+    navCommission: 'Заказы',
+    navAbout: 'О проекте',
+    navContact: 'Контакты',
+    heroBadge: 'Anime Sci-Fi AI музыкальная студия',
+    exploreWorks: 'Смотреть работы',
+    quickYoutubeSub: 'Канал',
+    quickMusicSub: 'Стриминг',
+    quickMvSub: 'Портфолио',
+    quickToolsSub: 'AI Subtitle Studio',
+    quickStoreSub: 'Загрузки',
+    quickContactSub: 'Связаться',
+    footerTagline: 'Создаем мечтательные миры с AI, музыкой, аниме и технологиями.',
+    siteMap: 'Карта сайта',
+    follow: 'Подписаться',
+    worksTitle: 'Музыкальные видео, AI-песни и аниме-миры',
+    viewAll: 'Смотреть все',
+    watchYoutube: 'Смотреть на YouTube',
+    featuredTool: 'Избранный инструмент',
+    downloadNow: 'Скачать',
+    viewItch: 'Открыть на itch.io',
+    learnMore: 'Подробнее',
+    commission: 'Заказы / Услуги',
+    servicesTitle: 'Поддержка производства для мечтательных проектов',
+    tools: 'Инструменты & Apps',
+    toolsTitle: 'Креативное ПО и экспериментальные инструменты',
+    store: 'Магазин / Загрузки',
+    storeTitle: 'Файлы размещены на внешних платформах',
+    about: 'О проекте',
+    aboutTitle: 'Личная anime AI студия',
+    contact: 'Контакты',
+    stayUpdated: 'Получать новости',
+    subscribeHint: 'Получайте новости о MV, музыке и инструментах',
+    subscribe: 'Подписаться',
+    emailPlaceholder: 'Введите email',
+    musicPlayer: 'Фоновая музыка',
+    play: 'Воспроизвести',
+    pause: 'Пауза',
+    next: 'Далее',
+    mute: 'Без звука',
+    unmute: 'Включить звук',
+    language: 'Язык',
+    autoplayHint: 'Если автозапуск заблокирован, нажмите Play.',
+    playPrompt: 'Нажмите, чтобы включить фоновую музыку.',
+    nowPlaying: 'Фоновая музыка играет',
+    showPlaylist: 'Показать плейлист',
+    hidePlaylist: 'Скрыть плейлист'
+  },
+  ar: {
+    latestWorks: 'أحدث الأعمال',
+    navHome: 'الرئيسية',
+    navMusic: 'الموسيقى',
+    navMv: 'MV',
+    navTools: 'الأدوات',
+    navStore: 'المتجر',
+    navCommission: 'طلبات',
+    navAbout: 'حول',
+    navContact: 'تواصل',
+    heroBadge: 'استوديو AI Music Anime Sci-Fi',
+    exploreWorks: 'استكشف الأعمال',
+    quickYoutubeSub: 'القناة',
+    quickMusicSub: 'البث',
+    quickMvSub: 'الأعمال',
+    quickToolsSub: 'AI Subtitle Studio',
+    quickStoreSub: 'تنزيلات',
+    quickContactSub: 'تواصل معنا',
+    footerTagline: 'نصنع عوالم حالمة بالذكاء الاصطناعي والموسيقى والأنمي والتقنية.',
+    siteMap: 'خريطة الموقع',
+    follow: 'تابع',
+    worksTitle: 'فيديوهات موسيقية وأغان AI وعوالم أنمي',
+    viewAll: 'عرض الكل',
+    watchYoutube: 'شاهد على YouTube',
+    featuredTool: 'أداة مميزة',
+    downloadNow: 'تنزيل الآن',
+    viewItch: 'عرض على itch.io',
+    learnMore: 'اعرف المزيد',
+    commission: 'طلبات / خدمات',
+    servicesTitle: 'دعم إنتاج لمشاريع حالمة',
+    tools: 'أدوات وتطبيقات',
+    toolsTitle: 'برامج إبداعية وأدوات تجريبية',
+    store: 'المتجر / التنزيلات',
+    storeTitle: 'التنزيلات متاحة عبر منصات خارجية',
+    about: 'حول',
+    aboutTitle: 'استوديو أنمي AI شخصي',
+    contact: 'تواصل',
+    stayUpdated: 'تابع التحديثات',
+    subscribeHint: 'احصل على آخر أخبار MV والموسيقى والأدوات',
+    subscribe: 'اشتراك',
+    emailPlaceholder: 'أدخل بريدك الإلكتروني',
+    musicPlayer: 'موسيقى الخلفية',
+    play: 'تشغيل',
+    pause: 'إيقاف مؤقت',
+    next: 'التالي',
+    mute: 'كتم',
+    unmute: 'إلغاء الكتم',
+    language: 'اللغة',
+    autoplayHint: 'إذا تم حظر التشغيل التلقائي، اضغط تشغيل.',
+    playPrompt: 'انقر لتشغيل موسيقى الخلفية.',
+    nowPlaying: 'موسيقى الخلفية قيد التشغيل',
+    showPlaylist: 'إظهار قائمة التشغيل',
+    hidePlaylist: 'إخفاء قائمة التشغيل'
+  }
 } as Record<LanguageCode, Record<string, string>>
 
 const englishFallback = copy.en
@@ -302,9 +942,9 @@ function Navbar({ data, lang, setLang }: Props & { lang: LanguageCode; setLang: 
           <span className="sm:hidden">UchanAI</span>
         </a>
         <div className="hidden items-center gap-2 lg:flex">
-          {nav.map(([label, href]) => (
-            <a key={href} href={href} className="rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide text-blue-100/[.82] transition hover:bg-white/10 hover:text-white">
-              {label}
+          {nav.map(([labelKey, href]) => (
+            <a key={labelKey} href={href} className="rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide text-blue-100/[.82] transition hover:bg-white/10 hover:text-white">
+              {text(lang, labelKey)}
             </a>
           ))}
         </div>
@@ -364,7 +1004,7 @@ function Hero({ data, lang }: Props & { lang: LanguageCode }) {
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8, delay: .12 }} className="order-1 md:order-2">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cosmic-cyan/30 bg-white/[.08] px-4 py-2 text-sm text-cosmic-cyan shadow-neon backdrop-blur">
             <Disc3 className="h-4 w-4 animate-spin [animation-duration:8s]" />
-            Anime Sci-Fi AI Music Studio
+            {text(lang, 'heroBadge')}
           </div>
           <h1 className="max-w-3xl text-5xl font-black leading-[.98] tracking-normal text-white md:text-7xl">
             <span className="bg-gradient-to-r from-white via-pink-200 to-cosmic-cyan bg-clip-text text-transparent">{localized(hero.titleI18n, lang, hero.title)}</span>
@@ -380,13 +1020,13 @@ function Hero({ data, lang }: Props & { lang: LanguageCode }) {
               {localized(hero.buttonTextI18n, lang, hero.buttonText)}
             </a>
             <a href="#works" className="inline-flex items-center gap-2 rounded-full border border-cosmic-cyan/40 bg-white/5 px-7 py-3 font-bold text-white transition hover:-translate-y-1 hover:bg-white/[.12] hover:shadow-neon">
-              Explore Works <ChevronRight className="h-5 w-5" />
+              {text(lang, 'exploreWorks')} <ChevronRight className="h-5 w-5" />
             </a>
           </div>
           <WaveBars />
         </motion.div>
       </div>
-      <QuickLinks data={data} />
+      <QuickLinks data={data} lang={lang} />
     </section>
   )
 }
@@ -405,25 +1045,25 @@ function WaveBars() {
   )
 }
 
-function QuickLinks({ data }: Props) {
+function QuickLinks({ data, lang }: Props & { lang: LanguageCode }) {
   const items = [
-    ['YouTube', 'Channel', Youtube, data.siteSettings.youtubeUrl],
-    ['Music', 'Streaming', Music2, '#works'],
-    ['MV', 'Portfolio', Tv, '#works'],
-    ['Tools', 'AI Subtitle Studio', Wrench, '#tools'],
-    ['Store', 'Downloads', ShoppingCart, '#store'],
-    ['Contact', 'Get in Touch', Mail, '#contact']
+    ['YouTube', 'quickYoutubeSub', Youtube, data.siteSettings.youtubeUrl],
+    [text(lang, 'navMusic'), 'quickMusicSub', Music2, '#works'],
+    [text(lang, 'navMv'), 'quickMvSub', Tv, '#works'],
+    [text(lang, 'navTools'), 'quickToolsSub', Wrench, '#tools'],
+    [text(lang, 'navStore'), 'quickStoreSub', ShoppingCart, '#store'],
+    [text(lang, 'navContact'), 'quickContactSub', Mail, '#contact']
   ] as const
 
   return (
     <div className="relative z-20 mx-auto max-w-6xl px-4 pb-12">
       <div className="glass-panel aurora-border grid grid-cols-2 gap-px rounded-2xl p-2 sm:grid-cols-3 lg:grid-cols-6">
-        {items.map(([title, sub, Icon, href]) => (
+        {items.map(([title, subKey, Icon, href]) => (
           <a key={title} href={href || '#'} target={href?.startsWith('http') ? '_blank' : undefined} className="group flex items-center gap-3 rounded-xl px-4 py-4 transition hover:bg-white/10">
             <Icon className="h-6 w-6 text-cosmic-cyan transition group-hover:text-cosmic-pink" />
             <span>
               <span className="block font-bold">{title}</span>
-              <span className="text-xs text-blue-200/[.68]">{sub}</span>
+              <span className="text-xs text-blue-200/[.68]">{text(lang, subKey)}</span>
             </span>
           </a>
         ))}
@@ -633,7 +1273,7 @@ function Subscribe({ data, lang }: Props & { lang: LanguageCode }) {
   )
 }
 
-function Footer({ data }: Props) {
+function Footer({ data, lang }: Props & { lang: LanguageCode }) {
   const settings = data.siteSettings
   const links = useMemo(() => nav.slice(0, 6), [])
 
@@ -645,7 +1285,7 @@ function Footer({ data }: Props) {
             <Image src="/images/UchanAIMusic(2).png" alt="UchanAIMusic" width={64} height={64} className="rounded-full border border-cosmic-cyan/30" />
             <div>
               <p className="font-black text-white">UchanAIMusic Studio</p>
-              <p className="text-sm text-blue-200/[.66]">AIと音楽、アニメ、テクノロジーの力で。</p>
+              <p className="text-sm text-blue-200/[.66]">{text(lang, 'footerTagline')}</p>
             </div>
           </div>
           <div className="mt-5 flex gap-3 text-blue-100">
@@ -655,17 +1295,17 @@ function Footer({ data }: Props) {
           </div>
         </div>
         <div>
-          <p className="mb-4 font-bold uppercase tracking-wide text-cosmic-pink">Site Map</p>
+          <p className="mb-4 font-bold uppercase tracking-wide text-cosmic-pink">{text(lang, 'siteMap')}</p>
           <div className="grid grid-cols-2 gap-2 text-sm text-blue-100/[.72]">
-            {links.map(([label, href]) => <a key={href} href={href} className="hover:text-white">{label}</a>)}
+            {links.map(([labelKey, href]) => <a key={labelKey} href={href} className="hover:text-white">{text(lang, labelKey)}</a>)}
           </div>
         </div>
         <div>
-          <p className="mb-4 font-bold uppercase tracking-wide text-cosmic-pink">Contact</p>
+          <p className="mb-4 font-bold uppercase tracking-wide text-cosmic-pink">{text(lang, 'contact')}</p>
           <a href={`mailto:${settings.email}`} className="inline-flex items-center gap-2 text-sm text-blue-100/[.72] hover:text-white"><Mail className="h-4 w-4" />{settings.email}</a>
         </div>
         <div>
-          <p className="mb-4 font-bold uppercase tracking-wide text-cosmic-pink">Follow</p>
+          <p className="mb-4 font-bold uppercase tracking-wide text-cosmic-pink">{text(lang, 'follow')}</p>
           <a href={settings.youtubeUrl} target="_blank" className="inline-flex items-center gap-2 text-sm text-blue-100/[.72] hover:text-white"><Youtube className="h-4 w-4" />YouTube</a>
         </div>
       </div>
@@ -677,6 +1317,7 @@ function Footer({ data }: Props) {
 function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[]; lang: LanguageCode }) {
   const audioTracks = tracks.filter((track) => track.audioUrl)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const volumeInputRef = useRef<HTMLInputElement | null>(null)
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [muted, setMuted] = useState(false)
@@ -743,6 +1384,12 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
     setPlaying(true)
   }
 
+  const syncVolume = (value: string | number) => {
+    const nextVolume = Math.max(0, Math.min(100, Number(value)))
+    setVolume(nextVolume)
+    if (audioRef.current) audioRef.current.volume = nextVolume / 100
+  }
+
   return (
     <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-xl rounded-2xl border border-cosmic-cyan/25 bg-cosmic-ink/85 p-3 text-white shadow-neon backdrop-blur-xl md:left-auto md:mx-0 md:w-[420px]">
       <audio ref={audioRef} onEnded={next} preload="auto" />
@@ -754,7 +1401,7 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
           <p className="text-xs font-bold uppercase tracking-[.18em] text-cosmic-pink">{text(lang, 'musicPlayer')}</p>
           <p className="truncate text-sm font-bold">{current.trackTitle}</p>
           <button onClick={() => (playing ? undefined : play())} className="mt-1 text-left text-xs font-semibold text-cosmic-cyan transition hover:text-white">
-            {blocked || !playing ? text(lang, 'playPrompt') : text(lang, 'autoplayHint')}
+            {playing ? text(lang, 'nowPlaying') : blocked ? text(lang, 'autoplayHint') : text(lang, 'playPrompt')}
           </button>
         </div>
         <button onClick={playing ? pause : play} className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-r from-cosmic-violet to-cosmic-pink shadow-neon" aria-label={playing ? text(lang, 'pause') : text(lang, 'play')}>
@@ -769,12 +1416,17 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
           {muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
         </button>
         <input
+          ref={volumeInputRef}
           type="range"
           min="0"
           max="100"
           value={volume}
-          onInput={(event) => setVolume(Number(event.currentTarget.value))}
-          onChange={(event) => setVolume(Number(event.currentTarget.value))}
+          onInput={(event) => syncVolume(event.currentTarget.value)}
+          onChange={(event) => syncVolume(event.currentTarget.value)}
+          onPointerMove={(event) => {
+            if (event.buttons === 1) syncVolume(event.currentTarget.value)
+          }}
+          onPointerUp={(event) => syncVolume(event.currentTarget.value)}
           className="h-1 flex-1 accent-cosmic-cyan"
           aria-label="Volume"
         />
@@ -819,7 +1471,7 @@ export default function HomePage({ data }: Props) {
       <StoreAboutContact data={data} lang={lang} />
       <Subscribe data={data} lang={lang} />
       <BackgroundMusicPlayer tracks={data.backgroundMusic} lang={lang} />
-      <Footer data={data} />
+      <Footer data={data} lang={lang} />
     </main>
   )
 }
