@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  background: #030816;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(124, 60, 255, .35), transparent 28rem),
+    radial-gradient(circle at 90% 12%, rgba(57, 231, 255, .24), transparent 24rem),
+    linear-gradient(180deg, #030816 0%, #071438 48%, #030816 100%);
+  color: #eef4ff;
+}
+
+::selection {
+  background: rgba(255, 100, 216, .45);
+}
+
+.glass-panel {
+  border: 1px solid rgba(150, 185, 255, .24);
+  background: linear-gradient(135deg, rgba(18, 32, 82, .66), rgba(7, 14, 42, .52));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 18px 70px rgba(0,0,0,.26);
+  backdrop-filter: blur(18px);
+}
+
+.aurora-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.aurora-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  background: linear-gradient(120deg, transparent 0 30%, rgba(57,231,255,.7), rgba(255,100,216,.65), transparent 70% 100%);
+  opacity: .32;
+  transform: translateX(-65%);
+  animation: border-flow 7s linear infinite;
+}
+
+.star-scroll {
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.92) 0 1px, transparent 1.4px),
+    radial-gradient(circle, rgba(125,194,255,.76) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 20% 20%, rgba(124,60,255,.42), transparent 28%),
+    radial-gradient(circle at 72% 20%, rgba(57,231,255,.28), transparent 24%),
+    radial-gradient(circle at 64% 76%, rgba(255,100,216,.2), transparent 32%);
+  background-size: 150px 150px, 230px 230px, 100% 100%, 100% 100%, 100% 100%;
+  animation: star-drift 28s linear infinite;
+}
+
+.neon-line {
+  animation: neon-breathe 4s ease-in-out infinite;
+}
+
+.floaty {
+  animation: floaty 6s ease-in-out infinite;
+}
+
+.wave-bar {
+  animation: wave-pulse 1.8s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform .24s ease, border-color .24s ease, box-shadow .24s ease;
+}
+
+.tilt-card:hover {
+  transform: perspective(900px) rotateX(4deg) rotateY(-5deg) translateY(-6px);
+  border-color: rgba(57,231,255,.52);
+  box-shadow: 0 0 34px rgba(124,60,255,.34), 0 0 56px rgba(57,231,255,.16);
+}
+
+@keyframes border-flow {
+  to { transform: translateX(65%); }
+}
+
+@keyframes star-drift {
+  from { background-position: 0 0, 0 0, center, center, center; }
+  to { background-position: 150px 220px, -230px 170px, center, center, center; }
+}
+
+@keyframes neon-breathe {
+  0%, 100% { opacity: .58; filter: drop-shadow(0 0 10px rgba(57,231,255,.35)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 22px rgba(255,100,216,.45)); }
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+@keyframes wave-pulse {
+  0%, 100% { transform: scaleY(.42); opacity: .62; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .001ms !important;
+  }
+
+  .tilt-card:hover {
+    transform: none;
+  }
+}
