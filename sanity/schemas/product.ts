@@ -6,10 +6,14 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({ name: 'productName', title: 'Product Name', type: 'string', validation: (Rule) => Rule.required() }),
+    defineField({ name: 'productNameI18n', title: 'Product Name Translations', type: 'localizedString' }),
     defineField({ name: 'description', title: 'Description', type: 'text' }),
+    defineField({ name: 'descriptionI18n', title: 'Description Translations', type: 'localizedText' }),
     defineField({ name: 'platform', title: 'Platform', type: 'string', options: { list: ['itch.io', 'Gumroad', 'Ko-fi', 'GitHub Release', 'YouTube'] } }),
     defineField({ name: 'url', title: 'URL', type: 'url' }),
     defineField({ name: 'status', title: 'Status', type: 'string' })
+    ,
+    defineField({ name: 'statusI18n', title: 'Status Translations', type: 'localizedString' })
   ],
   preview: {
     select: { title: 'productName', subtitle: 'platform' }

@@ -6,10 +6,14 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({ name: 'toolName', title: 'Tool Name', type: 'string', validation: (Rule) => Rule.required() }),
+    defineField({ name: 'toolNameI18n', title: 'Tool Name Translations', type: 'localizedString' }),
     defineField({ name: 'description', title: 'Description', type: 'text' }),
+    defineField({ name: 'descriptionI18n', title: 'Description Translations', type: 'localizedText' }),
     defineField({ name: 'status', title: 'Status', type: 'string' }),
+    defineField({ name: 'statusI18n', title: 'Status Translations', type: 'localizedString' }),
     defineField({ name: 'icon', title: 'Icon', type: 'string', description: 'Lucide icon key, e.g. captions, mic, music' }),
     defineField({ name: 'buttonText', title: 'Button Text', type: 'string' }),
+    defineField({ name: 'buttonTextI18n', title: 'Button Text Translations', type: 'localizedString' }),
     defineField({ name: 'buttonUrl', title: 'Button URL', type: 'url' })
   ],
   preview: {

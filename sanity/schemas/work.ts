@@ -6,9 +6,13 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({ name: 'title', title: 'Title', type: 'string', validation: (Rule) => Rule.required() }),
+    defineField({ name: 'titleI18n', title: 'Title Translations', type: 'localizedString' }),
     defineField({ name: 'type', title: 'Type', type: 'string' }),
+    defineField({ name: 'typeI18n', title: 'Type Translations', type: 'localizedString' }),
     defineField({ name: 'category', title: 'Category', type: 'string' }),
+    defineField({ name: 'categoryI18n', title: 'Category Translations', type: 'localizedString' }),
     defineField({ name: 'description', title: 'Description', type: 'text' }),
+    defineField({ name: 'descriptionI18n', title: 'Description Translations', type: 'localizedText' }),
     defineField({ name: 'youtubeUrl', title: 'YouTube URL', type: 'url', validation: (Rule) => Rule.required() }),
     defineField({ name: 'featured', title: 'Featured', type: 'boolean', initialValue: true }),
     defineField({ name: 'order', title: 'Order', type: 'number', initialValue: 0 }),

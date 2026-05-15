@@ -8,8 +8,12 @@ import product from './product'
 import about from './about'
 import contact from './contact'
 import backgroundMusic from './backgroundMusic'
+import localizedString from './localizedString'
+import localizedText from './localizedText'
 
 export const schemaTypes = [
+  localizedString,
+  localizedText,
   siteSettings,
   hero,
   work,

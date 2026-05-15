@@ -16,23 +16,25 @@ export const client = createClient({
 const homeQuery = `{
   "siteSettings": *[_type == "siteSettings"][0],
   "hero": *[_type == "hero"][0]{
-    title, subtitle, japaneseLine, englishLine, buttonText, buttonUrl,
+    title, titleI18n, subtitle, subtitleI18n, japaneseLine, shortLineI18n, englishLine, supportLineI18n, buttonText, buttonTextI18n, buttonUrl,
     "heroImageUrl": heroImage.asset->url
   },
   "works": *[_type == "work"] | order(coalesce(order, 999) asc, publishedAt desc) {
-    title, type, category, description, youtubeUrl, featured, order, publishedAt
+    title, titleI18n, type, typeI18n, category, categoryI18n, description, descriptionI18n, youtubeUrl, featured, order, publishedAt
   },
-  "subtitleStudio": *[_type == "subtitleStudio"][0],
+  "subtitleStudio": *[_type == "subtitleStudio"][0]{
+    title, titleI18n, subtitle, subtitleI18n, features, downloadUrl, itchUrl, learnMoreUrl
+  },
   "tools": *[_type == "tool"] | order(_createdAt asc) {
-    toolName, description, status, icon, buttonText, buttonUrl
+    toolName, toolNameI18n, description, descriptionI18n, status, statusI18n, icon, buttonText, buttonTextI18n, buttonUrl
   },
   "services": *[_type == "service"] | order(coalesce(order, 999) asc) {
-    serviceName, description, icon, order
+    serviceName, serviceNameI18n, description, descriptionI18n, icon, order
   },
   "products": *[_type == "product"] | order(_createdAt asc) {
-    productName, description, platform, url, status
+    productName, productNameI18n, description, descriptionI18n, platform, url, status, statusI18n
   },
-  "about": *[_type == "about"][0],
+  "about": *[_type == "about"][0]{zh, en, bodyI18n},
   "contact": *[_type == "contact"][0]
   ,
   "backgroundMusic": *[_type == "backgroundMusic" && enabled == true] | order(coalesce(order, 999) asc) {

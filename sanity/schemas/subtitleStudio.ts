@@ -6,7 +6,9 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({ name: 'title', title: 'Title', type: 'string' }),
+    defineField({ name: 'titleI18n', title: 'Title Translations', type: 'localizedString' }),
     defineField({ name: 'subtitle', title: 'Subtitle', type: 'string' }),
+    defineField({ name: 'subtitleI18n', title: 'Subtitle Translations', type: 'localizedString' }),
     defineField({ name: 'features', title: 'Feature List', type: 'array', of: [{ type: 'string' }] }),
     defineField({ name: 'downloadUrl', title: 'Download Now URL', type: 'url' }),
     defineField({ name: 'itchUrl', title: 'View on itch.io URL', type: 'url' }),

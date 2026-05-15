@@ -131,6 +131,10 @@ const copy: Record<LanguageCode, Record<string, string>> = {
     unmute: '開啟聲音',
     language: '語言',
     autoplayHint: '若瀏覽器阻擋自動播放，請點播放。'
+    ,
+    playPrompt: '點擊播放背景音樂',
+    showPlaylist: '顯示播放列表',
+    hidePlaylist: '收合播放列表'
   },
   en: {
     latestWorks: 'Latest Works',
@@ -162,6 +166,10 @@ const copy: Record<LanguageCode, Record<string, string>> = {
     unmute: 'Unmute',
     language: 'Language',
     autoplayHint: 'If autoplay is blocked, tap play.'
+    ,
+    playPrompt: 'Click to play background music',
+    showPlaylist: 'Show playlist',
+    hidePlaylist: 'Hide playlist'
   },
   ja: {
     latestWorks: '最新作品',
@@ -193,14 +201,32 @@ const copy: Record<LanguageCode, Record<string, string>> = {
     unmute: '音声オン',
     language: '言語',
     autoplayHint: '自動再生が止まる場合は再生を押してください。'
+    ,
+    playPrompt: 'クリックしてBGMを再生',
+    showPlaylist: 'プレイリストを表示',
+    hidePlaylist: 'プレイリストを閉じる'
   },
-  ko: {}, es: {}, fr: {}, de: {}, pt: {}, th: {}, vi: {}, id: {}, ms: {}, ru: {}, ar: {}
+  ko: { musicPlayer: '배경 음악', playPrompt: '배경 음악을 재생하려면 클릭하세요.', autoplayHint: '자동 재생이 차단되면 재생을 눌러주세요.', showPlaylist: '재생 목록 보기', hidePlaylist: '재생 목록 닫기' },
+  es: { musicPlayer: 'Música de fondo', playPrompt: 'Haz clic para reproducir la música de fondo.', autoplayHint: 'Si el navegador bloquea la reproducción automática, pulsa reproducir.', showPlaylist: 'Mostrar lista', hidePlaylist: 'Ocultar lista' },
+  fr: { musicPlayer: 'Musique de fond', playPrompt: 'Cliquez pour lancer la musique de fond.', autoplayHint: 'Si la lecture automatique est bloquée, cliquez sur lecture.', showPlaylist: 'Afficher la playlist', hidePlaylist: 'Masquer la playlist' },
+  de: { musicPlayer: 'Hintergrundmusik', playPrompt: 'Klicken, um die Hintergrundmusik abzuspielen.', autoplayHint: 'Wenn Autoplay blockiert wird, bitte Play drücken.', showPlaylist: 'Playlist anzeigen', hidePlaylist: 'Playlist ausblenden' },
+  pt: { musicPlayer: 'Música de fundo', playPrompt: 'Clique para tocar a música de fundo.', autoplayHint: 'Se a reprodução automática for bloqueada, toque em reproduzir.', showPlaylist: 'Mostrar playlist', hidePlaylist: 'Ocultar playlist' },
+  th: { musicPlayer: 'เพลงพื้นหลัง', playPrompt: 'คลิกเพื่อเล่นเพลงพื้นหลัง', autoplayHint: 'หากเบราว์เซอร์บล็อกการเล่นอัตโนมัติ ให้กดเล่น', showPlaylist: 'แสดงเพลย์ลิสต์', hidePlaylist: 'ซ่อนเพลย์ลิสต์' },
+  vi: { musicPlayer: 'Nhạc nền', playPrompt: 'Nhấn để phát nhạc nền.', autoplayHint: 'Nếu trình duyệt chặn tự phát, hãy nhấn phát.', showPlaylist: 'Hiện danh sách phát', hidePlaylist: 'Ẩn danh sách phát' },
+  id: { musicPlayer: 'Musik latar', playPrompt: 'Klik untuk memutar musik latar.', autoplayHint: 'Jika autoplay diblokir, tekan play.', showPlaylist: 'Tampilkan playlist', hidePlaylist: 'Sembunyikan playlist' },
+  ms: { musicPlayer: 'Muzik latar', playPrompt: 'Klik untuk memainkan muzik latar.', autoplayHint: 'Jika autoplay disekat, tekan play.', showPlaylist: 'Tunjuk senarai main', hidePlaylist: 'Sembunyi senarai main' },
+  ru: { musicPlayer: 'Фоновая музыка', playPrompt: 'Нажмите, чтобы включить фоновую музыку.', autoplayHint: 'Если автозапуск заблокирован, нажмите Play.', showPlaylist: 'Показать плейлист', hidePlaylist: 'Скрыть плейлист' },
+  ar: { musicPlayer: 'موسيقى الخلفية', playPrompt: 'انقر لتشغيل موسيقى الخلفية.', autoplayHint: 'إذا تم حظر التشغيل التلقائي، اضغط تشغيل.', showPlaylist: 'إظهار قائمة التشغيل', hidePlaylist: 'إخفاء قائمة التشغيل' }
 } as Record<LanguageCode, Record<string, string>>
 
 const englishFallback = copy.en
 
 function text(lang: LanguageCode, key: string) {
   return copy[lang]?.[key] || englishFallback[key] || key
+}
+
+function localized(value: { [key: string]: string | undefined } | undefined, lang: LanguageCode, fallback = '') {
+  return value?.[lang] || value?.zh || value?.en || fallback
 }
 
 const iconMap = {
@@ -322,7 +348,7 @@ function LanguagePicker({ lang, setLang }: { lang: LanguageCode; setLang: (lang:
   )
 }
 
-function Hero({ data }: Props) {
+function Hero({ data, lang }: Props & { lang: LanguageCode }) {
   const { hero, siteSettings } = data
   return (
     <section id="home" className="star-scroll relative min-h-[760px] overflow-hidden pt-24 md:min-h-[820px]">
@@ -341,17 +367,17 @@ function Hero({ data }: Props) {
             Anime Sci-Fi AI Music Studio
           </div>
           <h1 className="max-w-3xl text-5xl font-black leading-[.98] tracking-normal text-white md:text-7xl">
-            <span className="bg-gradient-to-r from-white via-pink-200 to-cosmic-cyan bg-clip-text text-transparent">{hero.title}</span>
+            <span className="bg-gradient-to-r from-white via-pink-200 to-cosmic-cyan bg-clip-text text-transparent">{localized(hero.titleI18n, lang, hero.title)}</span>
           </h1>
-          <p className="mt-6 text-xl text-blue-100 md:text-2xl">{hero.subtitle}</p>
+          <p className="mt-6 text-xl text-blue-100 md:text-2xl">{localized(hero.subtitleI18n, lang, hero.subtitle)}</p>
           <div className="mt-6 space-y-2 border-l border-cosmic-cyan/40 pl-5 text-blue-100/80">
-            <p>{hero.japaneseLine}</p>
-            <p className="text-sm text-blue-200/70">{hero.englishLine}</p>
+            <p>{localized(hero.shortLineI18n, lang, hero.japaneseLine)}</p>
+            <p className="text-sm text-blue-200/70">{localized(hero.supportLineI18n, lang, hero.englishLine)}</p>
           </div>
           <div className="mt-9 flex flex-wrap gap-4">
             <a href={hero.buttonUrl || siteSettings.youtubeUrl} target="_blank" className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cosmic-violet to-cosmic-pink px-7 py-3 font-bold text-white shadow-neon transition hover:-translate-y-1 hover:shadow-pink">
               <Play className="h-5 w-5 fill-white" />
-              {hero.buttonText}
+              {localized(hero.buttonTextI18n, lang, hero.buttonText)}
             </a>
             <a href="#works" className="inline-flex items-center gap-2 rounded-full border border-cosmic-cyan/40 bg-white/5 px-7 py-3 font-bold text-white transition hover:-translate-y-1 hover:bg-white/[.12] hover:shadow-neon">
               Explore Works <ChevronRight className="h-5 w-5" />
@@ -426,8 +452,8 @@ function LatestWorks({ data, lang }: Props & { lang: LanguageCode }) {
               </span>
             </div>
             <div className="p-5">
-              <p className="font-bold text-white">{work.title}</p>
-              <p className="mt-1 text-sm text-blue-200/70">{work.type || work.category}</p>
+              <p className="font-bold text-white">{localized(work.titleI18n, lang, work.title)}</p>
+              <p className="mt-1 text-sm text-blue-200/70">{localized(work.typeI18n, lang, work.type) || localized(work.categoryI18n, lang, work.category)}</p>
               <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-cosmic-cyan">
                 {text(lang, 'watchYoutube')} <ExternalLink className="h-4 w-4" />
               </span>
@@ -462,8 +488,8 @@ function SubtitleStudio({ data, lang }: Props & { lang: LanguageCode }) {
       <div className="glass-panel aurora-border grid gap-8 overflow-hidden rounded-3xl p-7 md:grid-cols-[1fr_.95fr] md:p-10">
         <div>
           <p className="text-sm font-bold uppercase tracking-[.22em] text-cosmic-cyan">{text(lang, 'featuredTool')}</p>
-          <h2 className="mt-3 text-4xl font-black text-white">{studio.title}</h2>
-          <p className="mt-3 text-lg text-blue-100/[.78]">{studio.subtitle}</p>
+          <h2 className="mt-3 text-4xl font-black text-white">{localized(studio.titleI18n, lang, studio.title)}</h2>
+          <p className="mt-3 text-lg text-blue-100/[.78]">{localized(studio.subtitleI18n, lang, studio.subtitle)}</p>
           <ul className="mt-7 grid gap-3 text-blue-100/[.82] sm:grid-cols-2">
             {studio.features?.map((feature) => (
               <li key={feature} className="flex items-start gap-3"><Sparkles className="mt-1 h-4 w-4 shrink-0 text-cosmic-pink" />{feature}</li>
@@ -500,34 +526,34 @@ function ToolsAndServices({ data, lang }: Props & { lang: LanguageCode }) {
       <MotionSection id="commission" className="glass-panel aurora-border rounded-3xl p-7">
         <SectionTitle kicker={text(lang, 'commission')} title={text(lang, 'servicesTitle')} />
         <div className="grid gap-3">
-          {data.services.map((service) => <ServiceRow key={service.serviceName} service={service} />)}
+          {data.services.map((service) => <ServiceRow key={service.serviceName} service={service} lang={lang} />)}
         </div>
       </MotionSection>
       <MotionSection id="tools" className="glass-panel aurora-border rounded-3xl p-7">
         <SectionTitle kicker={text(lang, 'tools')} title={text(lang, 'toolsTitle')} />
         <div className="grid gap-4">
-          {data.tools.map((tool) => <ToolCard key={tool.toolName} tool={tool} />)}
+          {data.tools.map((tool) => <ToolCard key={tool.toolName} tool={tool} lang={lang} />)}
         </div>
       </MotionSection>
     </div>
   )
 }
 
-function ServiceRow({ service }: { service: Service }) {
+function ServiceRow({ service, lang }: { service: Service; lang: LanguageCode }) {
   const Icon = iconFor(service.icon)
   return (
     <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/[.04] px-4 py-4">
       <Icon className="mt-1 h-5 w-5 shrink-0 text-cosmic-pink" />
       <div className="min-w-0 flex-1 space-y-1">
-        <p className="font-bold text-white">{service.serviceName}</p>
-        <p className="text-sm leading-6 text-blue-200/[.72]">{service.description}</p>
+        <p className="font-bold text-white">{localized(service.serviceNameI18n, lang, service.serviceName)}</p>
+        <p className="text-sm leading-6 text-blue-200/[.72]">{localized(service.descriptionI18n, lang, service.description)}</p>
       </div>
       <ChevronRight className="mt-1 h-5 w-5 shrink-0 text-cosmic-cyan" />
     </div>
   )
 }
 
-function ToolCard({ tool }: { tool: ToolItem }) {
+function ToolCard({ tool, lang }: { tool: ToolItem; lang: LanguageCode }) {
   const Icon = iconFor(tool.icon)
   return (
     <div className="tilt-card flex items-center gap-5 rounded-2xl border border-cosmic-cyan/20 bg-white/[.04] p-5">
@@ -535,11 +561,11 @@ function ToolCard({ tool }: { tool: ToolItem }) {
         <Icon className="h-10 w-10 text-white" />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-xl font-black text-white">{tool.toolName}</p>
-        <p className="mt-1 text-sm text-blue-200/70">{tool.description}</p>
+        <p className="text-xl font-black text-white">{localized(tool.toolNameI18n, lang, tool.toolName)}</p>
+        <p className="mt-1 text-sm text-blue-200/70">{localized(tool.descriptionI18n, lang, tool.description)}</p>
       </div>
       <a href={tool.buttonUrl || '#'} className="hidden rounded-xl border border-cosmic-pink/[.36] px-4 py-2 text-sm font-bold text-white transition hover:bg-white/10 sm:inline-flex">
-        {tool.buttonText || tool.status}
+        {localized(tool.buttonTextI18n, lang, tool.buttonText) || localized(tool.statusI18n, lang, tool.status)}
       </a>
     </div>
   )
@@ -556,9 +582,9 @@ function StoreAboutContact({ data, lang }: Props & { lang: LanguageCode }) {
             <a key={product.productName} href={product.url} target="_blank" className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/[.04] p-4 transition hover:border-cosmic-cyan/45 hover:bg-white/[.07]">
               <Download className="mt-1 h-6 w-6 text-cosmic-cyan" />
               <span className="min-w-0 flex-1">
-                <span className="block font-bold text-white">{product.productName}</span>
-                <span className="mt-1 block text-sm text-blue-200/70">{product.description}</span>
-                <span className="mt-3 inline-flex rounded-full border border-cosmic-pink/30 px-3 py-1 text-xs text-cosmic-pink">{product.platform} · {product.status}</span>
+                <span className="block font-bold text-white">{localized(product.productNameI18n, lang, product.productName)}</span>
+                <span className="mt-1 block text-sm text-blue-200/70">{localized(product.descriptionI18n, lang, product.description)}</span>
+                <span className="mt-3 inline-flex rounded-full border border-cosmic-pink/30 px-3 py-1 text-xs text-cosmic-pink">{product.platform} · {localized(product.statusI18n, lang, product.status)}</span>
               </span>
             </a>
           ))}
@@ -567,8 +593,8 @@ function StoreAboutContact({ data, lang }: Props & { lang: LanguageCode }) {
       <MotionSection id="about" className="glass-panel aurora-border rounded-3xl p-7">
         <SectionTitle kicker={text(lang, 'about')} title={text(lang, 'aboutTitle')} />
         <div className="space-y-5 text-blue-100/80">
-          <p>{data.about.zh}</p>
-          <p>{data.about.en}</p>
+          <p>{localized(data.about.bodyI18n, lang, lang === 'en' ? data.about.en : data.about.zh)}</p>
+          {lang === 'zh' && data.about.en ? <p>{data.about.en}</p> : null}
         </div>
         <div id="contact" className="mt-8 rounded-2xl border border-cosmic-cyan/[.18] bg-white/[.04] p-5">
           <p className="font-bold text-white">{text(lang, 'contact')}</p>
@@ -656,6 +682,7 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
   const [muted, setMuted] = useState(false)
   const [volume, setVolume] = useState(50)
   const [blocked, setBlocked] = useState(false)
+  const [showList, setShowList] = useState(false)
 
   const current = audioTracks[index]
 
@@ -710,6 +737,12 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
     setPlaying(true)
   }
 
+  const selectTrack = (trackIndex: number) => {
+    setIndex(trackIndex)
+    setShowList(false)
+    setPlaying(true)
+  }
+
   return (
     <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-xl rounded-2xl border border-cosmic-cyan/25 bg-cosmic-ink/85 p-3 text-white shadow-neon backdrop-blur-xl md:left-auto md:mx-0 md:w-[420px]">
       <audio ref={audioRef} onEnded={next} preload="auto" />
@@ -720,7 +753,9 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
         <div className="min-w-0 flex-1">
           <p className="text-xs font-bold uppercase tracking-[.18em] text-cosmic-pink">{text(lang, 'musicPlayer')}</p>
           <p className="truncate text-sm font-bold">{current.trackTitle}</p>
-          {blocked ? <p className="mt-1 text-xs text-blue-200/65">{text(lang, 'autoplayHint')}</p> : null}
+          <button onClick={() => (playing ? undefined : play())} className="mt-1 text-left text-xs font-semibold text-cosmic-cyan transition hover:text-white">
+            {blocked || !playing ? text(lang, 'playPrompt') : text(lang, 'autoplayHint')}
+          </button>
         </div>
         <button onClick={playing ? pause : play} className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-r from-cosmic-violet to-cosmic-pink shadow-neon" aria-label={playing ? text(lang, 'pause') : text(lang, 'play')}>
           {playing ? <Pause className="h-5 w-5" /> : <Play className="ml-0.5 h-5 w-5 fill-white" />}
@@ -738,12 +773,34 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
           min="0"
           max="100"
           value={volume}
-          onChange={(event) => setVolume(Number(event.target.value))}
+          onInput={(event) => setVolume(Number(event.currentTarget.value))}
+          onChange={(event) => setVolume(Number(event.currentTarget.value))}
           className="h-1 flex-1 accent-cosmic-cyan"
           aria-label="Volume"
         />
         <span className="w-10 text-right text-xs text-blue-200/70">{volume}%</span>
       </div>
+      {audioTracks.length > 1 ? (
+        <div className="mt-3">
+          <button onClick={() => setShowList((value) => !value)} className="w-full rounded-xl border border-white/10 bg-white/[.04] px-3 py-2 text-left text-xs font-bold text-blue-100 transition hover:bg-white/10">
+            {showList ? text(lang, 'hidePlaylist') : text(lang, 'showPlaylist')} · {audioTracks.length}
+          </button>
+          {showList ? (
+            <div className="mt-2 max-h-44 overflow-y-auto rounded-xl border border-white/10 bg-cosmic-ink/70 p-1">
+              {audioTracks.map((track, trackIndex) => (
+                <button
+                  key={`${track.trackTitle}-${trackIndex}`}
+                  onClick={() => selectTrack(trackIndex)}
+                  className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition ${trackIndex === index ? 'bg-cosmic-violet/35 text-white' : 'text-blue-100/75 hover:bg-white/[.07] hover:text-white'}`}
+                >
+                  <Music2 className="h-4 w-4 shrink-0 text-cosmic-cyan" />
+                  <span className="truncate">{track.trackTitle}</span>
+                </button>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -755,7 +812,7 @@ export default function HomePage({ data }: Props) {
     <main className="relative min-h-screen overflow-hidden">
       <MouseGlow />
       <Navbar data={data} lang={lang} setLang={setLang} />
-      <Hero data={data} />
+      <Hero data={data} lang={lang} />
       <LatestWorks data={data} lang={lang} />
       <SubtitleStudio data={data} lang={lang} />
       <ToolsAndServices data={data} lang={lang} />
