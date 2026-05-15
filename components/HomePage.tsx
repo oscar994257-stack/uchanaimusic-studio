@@ -337,13 +337,13 @@ function ToolsAndServices({ data }: Props) {
 function ServiceRow({ service }: { service: Service }) {
   const Icon = iconFor(service.icon)
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[.04] px-4 py-3">
-      <Icon className="h-5 w-5 text-cosmic-pink" />
-      <div className="min-w-0 flex-1">
+    <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/[.04] px-4 py-4">
+      <Icon className="mt-1 h-5 w-5 shrink-0 text-cosmic-pink" />
+      <div className="min-w-0 flex-1 space-y-1">
         <p className="font-bold text-white">{service.serviceName}</p>
-        <p className="truncate text-sm text-blue-200/[.68]">{service.description}</p>
+        <p className="text-sm leading-6 text-blue-200/[.72]">{service.description}</p>
       </div>
-      <ChevronRight className="h-5 w-5 text-cosmic-cyan" />
+      <ChevronRight className="mt-1 h-5 w-5 shrink-0 text-cosmic-cyan" />
     </div>
   )
 }
