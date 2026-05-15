@@ -1318,6 +1318,7 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
   const audioTracks = tracks.filter((track) => track.audioUrl)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const volumeInputRef = useRef<HTMLInputElement | null>(null)
+  const volumeLabelRef = useRef<HTMLSpanElement | null>(null)
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [muted, setMuted] = useState(false)
@@ -1388,6 +1389,7 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
     const nextVolume = Math.max(0, Math.min(100, Number(value)))
     setVolume(nextVolume)
     if (audioRef.current) audioRef.current.volume = nextVolume / 100
+    if (volumeLabelRef.current) volumeLabelRef.current.textContent = `${nextVolume}%`
   }
 
   return (
@@ -1423,14 +1425,20 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
           value={volume}
           onInput={(event) => syncVolume(event.currentTarget.value)}
           onChange={(event) => syncVolume(event.currentTarget.value)}
+          onClick={(event) => syncVolume(event.currentTarget.value)}
+          onMouseMove={(event) => {
+            if (event.buttons === 1) syncVolume(event.currentTarget.value)
+          }}
           onPointerMove={(event) => {
             if (event.buttons === 1) syncVolume(event.currentTarget.value)
           }}
           onPointerUp={(event) => syncVolume(event.currentTarget.value)}
+          onTouchMove={(event) => syncVolume(event.currentTarget.value)}
+          onTouchEnd={(event) => syncVolume(event.currentTarget.value)}
           className="h-1 flex-1 accent-cosmic-cyan"
           aria-label="Volume"
         />
-        <span className="w-10 text-right text-xs text-blue-200/70">{volume}%</span>
+        <span ref={volumeLabelRef} className="w-10 text-right text-xs text-blue-200/70">{volume}%</span>
       </div>
       {audioTracks.length > 1 ? (
         <div className="mt-3">
