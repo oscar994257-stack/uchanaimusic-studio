@@ -1186,7 +1186,9 @@ function ServiceRow({ service, lang }: { service: Service; lang: LanguageCode })
       <Icon className="mt-1 h-5 w-5 shrink-0 text-cosmic-pink" />
       <div className="min-w-0 flex-1 space-y-1">
         <p className="font-bold text-white">{localized(service.serviceNameI18n, lang, service.serviceName)}</p>
-        <p className="text-sm leading-6 text-blue-200/[.72]">{localized(service.descriptionI18n, lang, service.description)}</p>
+        <p className="max-h-48 overflow-y-auto whitespace-pre-line break-words pr-2 text-sm leading-6 text-blue-200/[.72] [overflow-wrap:anywhere] [scrollbar-color:rgba(57,231,255,.45)_rgba(255,255,255,.08)] [scrollbar-width:thin] md:max-h-64">
+          {localized(service.descriptionI18n, lang, service.description)}
+        </p>
       </div>
       <ChevronRight className="mt-1 h-5 w-5 shrink-0 text-cosmic-cyan" />
     </div>
