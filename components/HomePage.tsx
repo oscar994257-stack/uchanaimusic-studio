@@ -1081,25 +1081,27 @@ function LatestWorks({ data, lang }: Props & { lang: LanguageCode }) {
   return (
     <MotionSection id="works" className="mx-auto max-w-7xl px-4 py-14 lg:px-8">
       <SectionTitle kicker={text(lang, 'latestWorks')} title={text(lang, 'worksTitle')} action={{ label: text(lang, 'viewAll'), href: data.siteSettings.youtubeUrl || '#' }} />
-      <div className="grid gap-5 md:grid-cols-3">
-        {data.works.slice(0, 6).map((work) => (
-          <a key={work.title} href={work.youtubeUrl} target="_blank" className="tilt-card group glass-panel aurora-border overflow-hidden rounded-2xl">
-            <div className="relative aspect-video overflow-hidden">
-              <WorkImage url={work.youtubeUrl} title={work.title} />
-              <div className="absolute inset-0 bg-gradient-to-t from-cosmic-ink/[.88] via-transparent to-transparent" />
-              <span className="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-cosmic-ink/[.55] text-white shadow-neon backdrop-blur">
-                <Play className="ml-1 h-7 w-7 fill-white" />
-              </span>
-            </div>
-            <div className="p-5">
-              <p className="font-bold text-white">{localized(work.titleI18n, lang, work.title)}</p>
-              <p className="mt-1 text-sm text-blue-200/70">{localized(work.typeI18n, lang, work.type) || localized(work.categoryI18n, lang, work.category)}</p>
-              <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-cosmic-cyan">
-                {text(lang, 'watchYoutube')} <ExternalLink className="h-4 w-4" />
-              </span>
-            </div>
-          </a>
-        ))}
+      <div className="max-h-[860px] overflow-y-auto pr-2 [scrollbar-color:rgba(57,231,255,.45)_rgba(255,255,255,.08)] [scrollbar-width:thin] md:max-h-[660px]">
+        <div className="grid gap-5 md:grid-cols-3">
+          {data.works.map((work) => (
+            <a key={work.title} href={work.youtubeUrl} target="_blank" className="tilt-card group glass-panel aurora-border overflow-hidden rounded-2xl">
+              <div className="relative aspect-video overflow-hidden">
+                <WorkImage url={work.youtubeUrl} title={work.title} />
+                <div className="absolute inset-0 bg-gradient-to-t from-cosmic-ink/[.88] via-transparent to-transparent" />
+                <span className="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-cosmic-ink/[.55] text-white shadow-neon backdrop-blur">
+                  <Play className="ml-1 h-7 w-7 fill-white" />
+                </span>
+              </div>
+              <div className="p-5">
+                <p className="font-bold text-white">{localized(work.titleI18n, lang, work.title)}</p>
+                <p className="mt-1 text-sm text-blue-200/70">{localized(work.typeI18n, lang, work.type) || localized(work.categoryI18n, lang, work.category)}</p>
+                <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-cosmic-cyan">
+                  {text(lang, 'watchYoutube')} <ExternalLink className="h-4 w-4" />
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
     </MotionSection>
   )
