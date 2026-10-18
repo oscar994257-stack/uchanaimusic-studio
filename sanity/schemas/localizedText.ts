@@ -2,6 +2,7 @@ import { defineField, defineType } from 'sanity'
 
 const languageFields = [
   ['zh', 'Chinese Traditional'],
+  ['zhCN', 'Chinese Simplified'],
   ['en', 'English'],
   ['ja', 'Japanese'],
   ['ko', 'Korean'],

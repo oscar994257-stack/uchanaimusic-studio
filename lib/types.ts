@@ -7,6 +7,7 @@ export type SiteSettings = {
   email?: string
   twitterUrl?: string
   discordUrl?: string
+  paymentUrl?: string
 }
 
 export type LocalizedValue = Partial<Record<string, string>>
@@ -27,6 +28,7 @@ export type Hero = {
 }
 
 export type Work = {
+  _id?: string
   title: string
   titleI18n?: LocalizedValue
   type?: string
@@ -108,6 +110,7 @@ export type BackgroundMusicTrack = {
 }
 
 export type HomeData = {
+  advertisements?: Advertisement[]
   siteSettings: SiteSettings
   hero: Hero
   works: Work[]
@@ -118,4 +121,16 @@ export type HomeData = {
   about: About
   contact: Contact
   backgroundMusic: BackgroundMusicTrack[]
+}
+
+export type Advertisement = {
+  _id: string
+  placement: 'showcase' | 'commission'
+  slot: number
+  title: string
+  caption?: string
+  imageUrl?: string
+  targetUrl?: string
+  startsAt: string
+  endsAt: string
 }

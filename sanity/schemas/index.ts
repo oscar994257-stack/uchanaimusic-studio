@@ -10,9 +10,11 @@ import contact from './contact'
 import backgroundMusic from './backgroundMusic'
 import localizedString from './localizedString'
 import localizedText from './localizedText'
+import advertisement from './advertisement'
 
 export const schemaTypes = [
   localizedString,
+  advertisement,
   localizedText,
   siteSettings,
   hero,

@@ -20,7 +20,7 @@ const homeQuery = `{
     "heroImageUrl": heroImage.asset->url
   },
   "works": *[_type == "work"] | order(coalesce(order, 999) asc, publishedAt desc) {
-    title, titleI18n, type, typeI18n, category, categoryI18n, description, descriptionI18n, youtubeUrl, featured, order, publishedAt
+    _id, title, titleI18n, type, typeI18n, category, categoryI18n, description, descriptionI18n, youtubeUrl, featured, order, publishedAt
   },
   "subtitleStudio": *[_type == "subtitleStudio"][0]{
     title, titleI18n, subtitle, subtitleI18n, features, downloadUrl, itchUrl, learnMoreUrl
@@ -35,7 +35,10 @@ const homeQuery = `{
     productName, productNameI18n, description, descriptionI18n, platform, url, status, statusI18n
   },
   "about": *[_type == "about"][0]{zh, en, bodyI18n},
-  "contact": *[_type == "contact"][0]
+  "contact": *[_type == "contact"][0],
+  "advertisements": *[_type == "advertisement" && enabled == true && dateTime(startsAt) <= dateTime(now()) && dateTime(endsAt) > dateTime(now())] | order(slot asc, _updatedAt desc) {
+    _id, title, placement, slot, caption, targetUrl, startsAt, endsAt, "imageUrl": image.asset->url
+  }
   ,
   "backgroundMusic": *[_type == "backgroundMusic" && enabled == true] | order(coalesce(order, 999) asc) {
     trackTitle,
@@ -48,6 +51,7 @@ const homeQuery = `{
 
 function mergeData(data?: Partial<HomeData> | null): HomeData {
   return {
+    advertisements: data?.advertisements || [],
     siteSettings: { ...fallbackData.siteSettings, ...(data?.siteSettings || {}) },
     hero: { ...fallbackData.hero, ...(data?.hero || {}) },
     works: Array.isArray(data?.works) ? data.works : fallbackData.works,
@@ -61,9 +65,9 @@ function mergeData(data?: Partial<HomeData> | null): HomeData {
   }
 }
 
-export async function getHomeData(): Promise<HomeData> {
+export async function getHomeData(fresh = false): Promise<HomeData> {
   try {
-    const data = await client.fetch<Partial<HomeData>>(homeQuery, {}, { next: { revalidate: 60 } })
+    const data = await client.withConfig({ useCdn: !fresh, perspective: 'published' }).fetch<Partial<HomeData>>(homeQuery, {}, fresh ? { cache: 'no-store' } : { next: { revalidate: 60 } })
     return mergeData(data)
   } catch {
     return fallbackData
