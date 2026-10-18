@@ -9,7 +9,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@sanity/icons": "3.7.4",
     "@sanity/image-url": "^1.1.0",
+    "@sanity/ui": "2.16.22",
     "@sanity/vision": "^3.68.3",
     "framer-motion": "^11.15.0",
     "lucide-react": "^0.468.0",

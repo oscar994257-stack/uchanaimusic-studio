@@ -50,7 +50,7 @@ function mergeData(data?: Partial<HomeData> | null): HomeData {
   return {
     siteSettings: { ...fallbackData.siteSettings, ...(data?.siteSettings || {}) },
     hero: { ...fallbackData.hero, ...(data?.hero || {}) },
-    works: data?.works?.length ? data.works : fallbackData.works,
+    works: Array.isArray(data?.works) ? data.works : fallbackData.works,
     subtitleStudio: { ...fallbackData.subtitleStudio, ...(data?.subtitleStudio || {}) },
     tools: data?.tools?.length ? data.tools : fallbackData.tools,
     services: data?.services?.length ? data.services : fallbackData.services,

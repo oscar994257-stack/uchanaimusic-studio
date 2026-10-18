@@ -1093,8 +1093,9 @@ function LatestWorks({ data, lang }: Props & { lang: LanguageCode }) {
                 </span>
               </div>
               <div className="p-5">
-                <p className="font-bold text-white">{localized(work.titleI18n, lang, work.title)}</p>
-                <p className="mt-1 text-sm text-blue-200/70">{localized(work.typeI18n, lang, work.type) || localized(work.categoryI18n, lang, work.category)}</p>
+                <p className="font-bold text-white">{work.title}</p>
+                <p className="mt-1 text-sm text-blue-200/70">{work.type || work.category}</p>
+                {work.description && <p className="mt-3 max-h-32 overflow-y-auto whitespace-pre-line break-words text-sm leading-6 text-blue-200/70 [overflow-wrap:anywhere]">{work.description}</p>}
                 <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-cosmic-cyan">
                   {text(lang, 'watchYoutube')} <ExternalLink className="h-4 w-4" />
                 </span>
