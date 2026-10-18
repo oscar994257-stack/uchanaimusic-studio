@@ -1,6 +1,5 @@
 import 'server-only'
 import { unstable_cache } from 'next/cache'
-import type { HomeData } from './types'
 
 const targets: Record<string, string> = { zh: 'zh-TW', 'zh-CN': 'zh-CN', en: 'en', ja: 'ja', ko: 'ko' }
 const fields = new Set(['title', 'subtitle', 'japaneseLine', 'englishLine', 'buttonText', 'description', 'type', 'category', 'serviceName', 'toolName', 'productName', 'status', 'caption', 'features', 'zh', 'en'])
@@ -18,7 +17,7 @@ const translateBatch = unstable_cache(async (texts: string[], lang: string) => {
   return translations.map(item => item.translatedText.replaceAll('UCHANBRANDSTUDIO', 'UchanAIMusic Studio').replaceAll('UCHANBRAND', 'UchanAIMusic').replaceAll('UCHANVOICELAB', 'Uchan Voice Lab').replaceAll('PANELBEATSTUDIO', 'PanelBeat-Studio'))
 }, ['cms-translation-v1'], { revalidate: 86400 })
 
-export async function translateContent(source: HomeData, lang: string) {
+export async function translateContent<T extends object>(source: T, lang: string) {
   if (!targets[lang]) return { data: source, mode: 'original' }
   if (!process.env.GOOGLE_TRANSLATE_API_KEY) return { data: source, mode: 'original' }
   const data = structuredClone(source)

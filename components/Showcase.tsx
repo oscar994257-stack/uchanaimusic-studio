@@ -59,15 +59,16 @@ export function FeaturedCinema({ works, ads = [], lang, email }: { works: Work[]
   const [playingId, setPlayingId] = useState('')
   const currentIndex = Math.max(0, available.findIndex(work => (work._id || work.youtubeUrl) === selectedId))
   const work = available[currentIndex]
+  const playbackKey = (item: Work) => `${item._id || ''}:${extractYouTubeId(item.youtubeUrl) || ''}`
   const select = (index: number, autoPlay = false) => {
     const chosen = available[(index + available.length) % available.length]
     const id = chosen?._id || chosen?.youtubeUrl || ''
     setSelectedId(id)
-    setPlayingId(autoPlay ? id : '')
+    setPlayingId(autoPlay && chosen ? playbackKey(chosen) : '')
     if (autoPlay) window.dispatchEvent(new Event('uchan:video-start'))
   }
   const start = () => {
-    setPlayingId(work._id || work.youtubeUrl || '')
+    setPlayingId(playbackKey(work))
     window.dispatchEvent(new Event('uchan:video-start'))
   }
   return (
@@ -76,7 +77,7 @@ export function FeaturedCinema({ works, ads = [], lang, email }: { works: Work[]
       <div className="cinema-layout">
         <div className="cinema-main">
           {work ? <>
-            <VideoPlayer key={work.youtubeUrl} work={work} lang={lang} active={playingId === (work._id || work.youtubeUrl)} start={start} />
+            <VideoPlayer key={playbackKey(work)} work={work} lang={lang} active={playingId === playbackKey(work)} start={start} />
             <div className="film-heading"><div><p className="eyebrow">{work.type || work.category || 'AI ANIME MV'}</p><h3>{work.title}</h3></div><div className="film-navigation"><button onClick={() => select(currentIndex - 1)} aria-label={ui(lang, 'previous')} disabled={available.length < 2}><ChevronLeft /></button><span>{currentIndex + 1} / {available.length}</span><button onClick={() => select(currentIndex + 1)} aria-label={ui(lang, 'next')} disabled={available.length < 2}><ChevronRight /></button></div></div>
             <div className="film-strip" role="group" aria-label={ui(lang, 'cinema')}>
               {available.map((item, index) => <button key={item._id || item.youtubeUrl} className={index === currentIndex ? 'film-choice is-selected' : 'film-choice'} onClick={() => select(index, true)} aria-pressed={index === currentIndex} aria-label={`${index + 1}. ${item.title}`}><Thumbnail key={item.youtubeUrl} work={item} /><span className="film-number">0{index + 1}</span><span className="film-choice-title">{item.title}</span></button>)}

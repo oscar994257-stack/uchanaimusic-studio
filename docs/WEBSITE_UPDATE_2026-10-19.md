@@ -1,5 +1,11 @@
 # Website update — 2026-10-19
 
+## Follow-up: Works publishing sync
+
+The public gallery now checks `/api/works` every 15 seconds while visible, and immediately on focus, returning to the tab, or reconnecting. The route reads Sanity's published perspective directly with the CDN and Next/browser response caches disabled. Failed reads keep the last successful gallery; empty successful results clear it. Draft edits remain private until Publish.
+
+Both initial rendering and live checks select the newest five work documents by `_createdAt`, with `_id` as a stable tie breaker. Old hidden `order`/`publishedAt` fields no longer prevent new works from appearing. Unpublishing or deleting a work removes it; changing an existing document's YouTube URL resets its player and thumbnail without automatically playing the replacement. Text changes update its title and introduction. No GitHub push or Vercel deployment is needed for future CMS-only changes.
+
 ## Public website
 
 - Keep the five currently published YouTube works. No CMS work is deleted by this update.

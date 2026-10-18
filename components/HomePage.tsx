@@ -37,6 +37,7 @@ import { CommissionPartner, FeaturedCinema, PortalPreview } from './Showcase'
 import { VisitorStats } from './VisitorStats'
 import { CollaborationTerms } from './CollaborationTerms'
 import { ui } from '@/lib/site-copy'
+import { usePublishedWorks } from '@/lib/use-published-works'
 
 type Props = {
   data: HomeData
@@ -858,6 +859,7 @@ export default function HomePage({ data: sourceData }: Props) {
   const [translation, setTranslation] = useState<{ lang: string; data: HomeData; mode: string } | null>(null)
   const [loadingTranslation, setLoadingTranslation] = useState(false)
   const data = translation?.lang === lang ? translation.data : sourceData
+  const publishedWorks = usePublishedWorks(data.works, lang)
 
   useEffect(() => {
     try { const saved = localStorage.getItem('uchan-language'); if (languages.some(([code]) => code === saved)) setLang(saved as LanguageCode) } catch {}
@@ -879,7 +881,7 @@ export default function HomePage({ data: sourceData }: Props) {
       <PortalPreview lang={lang} />
       {lang !== 'zh' && <p className="translation-status content-shell" role="status">{ui(lang, loadingTranslation ? 'translating' : translation?.mode === 'automatic' ? 'translated' : 'translation')}</p>}
       <Hero data={data} lang={lang} />
-      <FeaturedCinema works={data.works} ads={data.advertisements} lang={lang} email={data.siteSettings.email || 'oscar994257@gmail.com'} />
+      <FeaturedCinema works={publishedWorks} ads={data.advertisements} lang={lang} email={data.siteSettings.email || 'oscar994257@gmail.com'} />
       <SubtitleStudio data={data} lang={lang} />
       <ToolsAndServices data={data} lang={lang} />
       <StoreAboutContact data={data} lang={lang} />

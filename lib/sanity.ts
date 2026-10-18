@@ -13,15 +13,17 @@ export const client = createClient({
   useCdn: true
 })
 
+export const publishedWorksQuery = `*[_type == "work"] | order(_createdAt desc, _id asc) [0...5] {
+  _id, title, titleI18n, type, typeI18n, category, categoryI18n, description, descriptionI18n, youtubeUrl
+}`
+
 const homeQuery = `{
   "siteSettings": *[_type == "siteSettings"][0],
   "hero": *[_type == "hero"][0]{
     title, titleI18n, subtitle, subtitleI18n, japaneseLine, shortLineI18n, englishLine, supportLineI18n, buttonText, buttonTextI18n, buttonUrl,
     "heroImageUrl": heroImage.asset->url
   },
-  "works": *[_type == "work"] | order(coalesce(order, 999) asc, publishedAt desc) {
-    _id, title, titleI18n, type, typeI18n, category, categoryI18n, description, descriptionI18n, youtubeUrl, featured, order, publishedAt
-  },
+  "works": ${publishedWorksQuery},
   "subtitleStudio": *[_type == "subtitleStudio"][0]{
     title, titleI18n, subtitle, subtitleI18n, features, downloadUrl, itchUrl, learnMoreUrl
   },

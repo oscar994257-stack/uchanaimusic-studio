@@ -36,6 +36,9 @@ export function WorkInput(props: ObjectInputProps) {
 
   return (
     <Stack space={4}>
+      <Card padding={3} radius={2} border tone="primary">
+        <Text size={1}>修改後請按 Publish；官網會在約 15 秒內檢查更新，切回官網時也會立即同步。首頁依新增時間顯示最新五筆作品。Unpublish 或刪除後，該作品會從官網移除。</Text>
+      </Card>
       <Card padding={3} radius={2} border tone="critical">
         <Stack space={3}>
           <Button
