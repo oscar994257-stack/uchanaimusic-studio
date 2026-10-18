@@ -25,7 +25,9 @@ Use **廣告合作 / Partner Placements**. Select showcase slots 1–5 or commis
 
 Each current booking is capped at one calendar month and the entire campaign at three calendar months. A January 31 start ends no later than February's last day, not March 3. Enabled defaults to false; activate only after an actual commercial agreement and payment confirmation. Expired ads disappear on the next data refresh; open pages also check expiration every minute. No arbitrary ad JavaScript is executed.
 
-## Visitor statistics — server configuration required
+## Visitor statistics — hidden at the owner's request
+
+The homepage no longer mounts VisitorStats. Its cards, dates, pending message and privacy disclosure are hidden, and visiting the homepage no longer triggers statistics collection or polling. The unused component and API code remain available for future work. Do not enable statistics as part of this release. The following configuration notes are retained for reference only.
 
 Set these **server-only** Vercel environment variables, then redeploy:
 

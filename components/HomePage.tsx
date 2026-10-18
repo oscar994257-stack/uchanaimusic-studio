@@ -34,7 +34,6 @@ import type { BackgroundMusicTrack, HomeData, Service, ToolItem } from '@/lib/ty
 import { extractYouTubeId, getYouTubeThumbnail } from '@/lib/youtube'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CommissionPartner, FeaturedCinema, PortalPreview } from './Showcase'
-import { VisitorStats } from './VisitorStats'
 import { CollaborationTerms } from './CollaborationTerms'
 import { ui } from '@/lib/site-copy'
 import { usePublishedWorks } from '@/lib/use-published-works'
@@ -887,7 +886,6 @@ export default function HomePage({ data: sourceData }: Props) {
       <StoreAboutContact data={data} lang={lang} />
       <CollaborationTerms lang={lang} email={data.siteSettings.email || 'oscar994257@gmail.com'} paymentUrl={data.siteSettings.paymentUrl} />
       <section className="follow-section content-shell"><div><p className="eyebrow">KEEP CREATING · KEEP IN TOUCH</p><h2>{text(lang, 'stayUpdated')}</h2></div><div className="terms-actions"><a className="primary-action" href={data.siteSettings.youtubeUrl} target="_blank" rel="noopener noreferrer"><Youtube size={18} />YouTube</a><a className="secondary-action" href={`mailto:${data.siteSettings.email}`}>{ui(lang, 'contact')}</a></div></section>
-      <VisitorStats lang={lang} />
       <BackgroundMusicPlayer tracks={data.backgroundMusic} lang={lang} />
       <Footer data={data} lang={lang} />
     </main>
