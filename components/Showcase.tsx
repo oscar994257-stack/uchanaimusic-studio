@@ -7,8 +7,8 @@ import { extractYouTubeId, getYouTubeThumbnail } from '@/lib/youtube'
 import { safeHttpsUrl, ui } from '@/lib/site-copy'
 
 function useCurrentTime() {
-  const [now, setNow] = useState(() => Date.now())
-  useEffect(() => { const timer = window.setInterval(() => setNow(Date.now()), 60000); return () => window.clearInterval(timer) }, [])
+  const [now, setNow] = useState(0)
+  useEffect(() => { setNow(Date.now()); const timer = window.setInterval(() => setNow(Date.now()), 60000); return () => window.clearInterval(timer) }, [])
   return now
 }
 
@@ -59,11 +59,12 @@ export function FeaturedCinema({ works, ads = [], lang, email }: { works: Work[]
   const [playingId, setPlayingId] = useState('')
   const currentIndex = Math.max(0, available.findIndex(work => (work._id || work.youtubeUrl) === selectedId))
   const work = available[currentIndex]
-  const select = (index: number) => {
+  const select = (index: number, autoPlay = false) => {
     const chosen = available[(index + available.length) % available.length]
     const id = chosen?._id || chosen?.youtubeUrl || ''
     setSelectedId(id)
-    setPlayingId('')
+    setPlayingId(autoPlay ? id : '')
+    if (autoPlay) window.dispatchEvent(new Event('uchan:video-start'))
   }
   const start = () => {
     setPlayingId(work._id || work.youtubeUrl || '')
@@ -78,7 +79,7 @@ export function FeaturedCinema({ works, ads = [], lang, email }: { works: Work[]
             <VideoPlayer key={work.youtubeUrl} work={work} lang={lang} active={playingId === (work._id || work.youtubeUrl)} start={start} />
             <div className="film-heading"><div><p className="eyebrow">{work.type || work.category || 'AI ANIME MV'}</p><h3>{work.title}</h3></div><div className="film-navigation"><button onClick={() => select(currentIndex - 1)} aria-label={ui(lang, 'previous')} disabled={available.length < 2}><ChevronLeft /></button><span>{currentIndex + 1} / {available.length}</span><button onClick={() => select(currentIndex + 1)} aria-label={ui(lang, 'next')} disabled={available.length < 2}><ChevronRight /></button></div></div>
             <div className="film-strip" role="group" aria-label={ui(lang, 'cinema')}>
-              {available.map((item, index) => <button key={item._id || item.youtubeUrl} className={index === currentIndex ? 'film-choice is-selected' : 'film-choice'} onClick={() => select(index)} aria-pressed={index === currentIndex} aria-label={`${index + 1}. ${item.title}`}><Thumbnail key={item.youtubeUrl} work={item} /><span className="film-number">0{index + 1}</span><span className="film-choice-title">{item.title}</span></button>)}
+              {available.map((item, index) => <button key={item._id || item.youtubeUrl} className={index === currentIndex ? 'film-choice is-selected' : 'film-choice'} onClick={() => select(index, true)} aria-pressed={index === currentIndex} aria-label={`${index + 1}. ${item.title}`}><Thumbnail key={item.youtubeUrl} work={item} /><span className="film-number">0{index + 1}</span><span className="film-choice-title">{item.title}</span></button>)}
             </div>
           </> : <div className="cinema-empty"><Sparkles /><p>{ui(lang, 'videoEmpty')}</p></div>}
         </div>
