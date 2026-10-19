@@ -129,6 +129,8 @@ export type Advertisement = {
   slot: number
   title: string
   caption?: string
+  description?: string
+  imageAlt?: string
   imageUrl?: string
   targetUrl?: string
   startsAt: string

@@ -21,6 +21,10 @@ Both initial rendering and live checks select the newest five work documents by 
 
 ## Ads in Sanity
 
+Follow-up layout: the desktop film and partner card use a 7:3 split with matching heights. The film title and five larger thumbnail cards span both columns below; mobile places the partner card below the film and uses a horizontally scrollable film strip. Reserved cards have simpler copy. Actual partner images use contain to preserve the complete artwork, with a title, two-line description and a destination button (or collaboration email when no URL is supplied).
+
+The advertisement editor now has Content and Schedule tabs, an inline draft image/text preview, image alt text and a separate 160-character description. New documents prefill a one-month schedule but remain disabled. Recommended artwork is 1200 × 900, with portrait images still supported. The 100-character marquee is separate from the description. Draft preview does not publish an advertisement; configure the slot and schedule, enable and Publish to display it. Refresh the public page after its approximately one-minute content cache refresh. No sample advertisements are published by this code update.
+
 Use **廣告合作 / Partner Placements**. Select showcase slots 1–5 or commission slot 6; upload an image, add a caption and optional HTTPS destination, and set the first campaign start plus the current start/end dates.
 
 Each current booking is capped at one calendar month and the entire campaign at three calendar months. A January 31 start ends no later than February's last day, not March 3. Enabled defaults to false; activate only after an actual commercial agreement and payment confirmation. Expired ads disappear on the next data refresh; open pages also check expiration every minute. No arbitrary ad JavaScript is executed.

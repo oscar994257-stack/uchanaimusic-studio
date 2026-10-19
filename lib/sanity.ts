@@ -39,7 +39,7 @@ const homeQuery = `{
   "about": *[_type == "about"][0]{zh, en, bodyI18n},
   "contact": *[_type == "contact"][0],
   "advertisements": *[_type == "advertisement" && enabled == true && dateTime(startsAt) <= dateTime(now()) && dateTime(endsAt) > dateTime(now())] | order(slot asc, _updatedAt desc) {
-    _id, title, placement, slot, caption, targetUrl, startsAt, endsAt, "imageUrl": image.asset->url
+    _id, title, placement, slot, caption, description, targetUrl, startsAt, endsAt, "imageUrl": image.asset->url, "imageAlt": image.alt
   }
   ,
   "backgroundMusic": *[_type == "backgroundMusic" && enabled == true] | order(coalesce(order, 999) asc) {
