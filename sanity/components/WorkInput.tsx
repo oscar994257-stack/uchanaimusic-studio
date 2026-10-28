@@ -7,19 +7,36 @@ import { type ObjectInputProps, useDocumentOperation, useDocumentOperationEvent,
 import { ConfirmDeleteDialog, useDocumentPane } from 'sanity/structure'
 
 export function WorkInput(props: ObjectInputProps) {
-  const { documentId, documentType, displayed, connectionState, setIsDeleting, selectedReleaseId, revisionId } = useDocumentPane()
+  const { documentId, documentType, displayed, connectionState, setIsDeleting, selectedReleaseId } = useDocumentPane()
   const { delete: deleteOperation } = useDocumentOperation(documentId, documentType, selectedReleaseId)
   const operationEvent = useDocumentOperationEvent(documentId, documentType)
-  const [permissions, permissionsLoading] = useDocumentPairPermissions({ id: documentId, type: documentType, permission: 'delete' })
+  const [permissions, permissionsLoading] = useDocumentPairPermissions({ id: documentId, type: documentType, version: selectedReleaseId, permission: 'delete' })
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState('')
-  const disabled = props.readOnly || deleting || permissionsLoading || !permissions?.granted || !!deleteOperation.disabled || connectionState !== 'connected' || !!selectedReleaseId || !!revisionId
+  // A published document's form can be read-only while deletion is permitted.
+  // Match Studio's Delete action: authorize the operation independently of editing.
+  const blockedReason = permissionsLoading ? '正在確認刪除權限…'
+    : !permissions?.granted ? '目前登入的帳號沒有刪除權限，請使用此專案的管理者帳號。'
+    : connectionState !== 'connected' ? '後台尚未連線，請稍候或重新整理。'
+    : deleteOperation.disabled === 'NOTHING_TO_DELETE' ? '這筆作品尚未儲存，或已經刪除。'
+    : deleteOperation.disabled ? '目前無法執行刪除，請重新整理後再試。'
+    : ''
+  const disabled = deleting || !!blockedReason
+
+  useEffect(() => {
+    setConfirmOpen(false)
+    setDeleting(false)
+    setError('')
+  }, [documentId, selectedReleaseId])
 
   useEffect(() => {
     if (operationEvent?.op !== 'delete') return
     if (operationEvent.type === 'error') {
       setError(`刪除失敗：${operationEvent.error.message}`)
+      setDeleting(false)
+      setIsDeleting(false)
+    } else if (operationEvent.type === 'success') {
       setDeleting(false)
       setIsDeleting(false)
     }
@@ -31,7 +48,13 @@ export function WorkInput(props: ObjectInputProps) {
     setError('')
     setDeleting(true)
     setIsDeleting(true)
-    deleteOperation.execute()
+    try {
+      deleteOperation.execute()
+    } catch (cause) {
+      setError(`刪除失敗：${cause instanceof Error ? cause.message : '請重新整理後再試。'}`)
+      setDeleting(false)
+      setIsDeleting(false)
+    }
   }
 
   return (
@@ -50,7 +73,7 @@ export function WorkInput(props: ObjectInputProps) {
             onClick={() => setConfirmOpen(true)}
           />
           <Text size={1}>刪除前會再次確認；刪除後這項作品也會從官網移除。</Text>
-          {!permissionsLoading && !permissions?.granted && <Text size={1}>目前登入的帳號沒有刪除權限。</Text>}
+          {blockedReason && <Text size={1} role="status">{blockedReason}</Text>}
           {error && <Text size={1} role="alert">{error}</Text>}
         </Stack>
       </Card>
