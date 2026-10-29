@@ -57,6 +57,7 @@ section[id] { scroll-margin-top: 110px; }
 .mobile-nav { display: none; }
 .display-mode-switch { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; gap: 5px; padding: 6px 9px; border: 1px solid #a4b7ec40; border-radius: 999px; color: #b9e5ed; font-size: 11px; line-height: 1.4; white-space: nowrap; }
 .display-mode-switch:hover { background: #a0c5f01a; color: #fff; }
+.mobile-display-notice { display: none; }
 .desktop-view-page { width: 1280px; min-width: 1280px; margin-inline: auto; }
 body:has(.desktop-view-page) { min-width: 1280px; overflow-x: auto; }
 .translation-status { font-size: 12px; color: #b3a3ce; padding: 12px 0; line-height: 1.8; }
@@ -148,6 +149,10 @@ body:has(.desktop-view-page) { min-width: 1280px; overflow-x: auto; }
 .visitor-notes details { margin-top: 8px; }
 footer { padding-bottom: 190px; }
 @media (max-width: 1023px) {
+  .mobile-display-notice { display: block; text-align: center; padding: 8px 12px; background: #211a3bf5; border-bottom: 1px solid #b4a3eb30; color: #d0e5f7; font-size: 11px; line-height: 1.6; }
+  .mobile-display-notice a { display: block; }
+  main:not(.desktop-view-page) .portal-preview { margin-top: 185px; }
+  main:not(.desktop-view-page) section[id] { scroll-margin-top: 155px; }
   .mobile-nav { display: flex; flex-basis: 100%; overflow-x: auto; gap: 20px; white-space: nowrap; font-size: 11px; color: #b4c0d9; padding-top: 5px; scrollbar-width: none; }
   .portal-preview { margin-top: 145px; grid-template-columns: 125px 1fr; padding: 26px; }
   .portal-art { height: 170px; }

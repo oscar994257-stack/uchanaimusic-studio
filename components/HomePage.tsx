@@ -37,7 +37,8 @@ import { CommissionPartner, FeaturedCinema, PortalPreview } from './Showcase'
 import { CollaborationTerms } from './CollaborationTerms'
 import { ui } from '@/lib/site-copy'
 import { usePublishedWorks } from '@/lib/use-published-works'
-import { DisplayModeSwitch } from './DisplayModeSwitch'
+import { DisplayModeNotice, DisplayModeSwitch } from './DisplayModeSwitch'
+import { useDisplayModeHistory } from '@/lib/use-display-mode-history'
 
 type Props = {
   data: HomeData
@@ -370,6 +371,7 @@ function Navbar({ data, lang, setLang, desktopMode }: Props & { lang: LanguageCo
 
   return (
     <header className={`fixed left-0 right-0 top-0 z-50 transition-all ${scrolled ? 'border-b border-white/10 bg-[#050b22]/75 shadow-neon backdrop-blur-xl' : 'bg-transparent'}`}>
+      <DisplayModeNotice desktopMode={desktopMode} lang={lang} />
       <nav className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-y-3 px-4 py-4 lg:px-8">
         <a href="#home" className="flex items-center gap-3 text-lg font-bold tracking-wide text-white">
           <Sparkles className="h-6 w-6 text-cosmic-pink" />
@@ -856,6 +858,7 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
 }
 
 export default function HomePage({ data: sourceData, desktopMode = false }: Props & { desktopMode?: boolean }) {
+  useDisplayModeHistory(desktopMode)
   const [lang, setLang] = useState<LanguageCode>('zh')
   const [translation, setTranslation] = useState<{ lang: string; data: HomeData; mode: string } | null>(null)
   const [loadingTranslation, setLoadingTranslation] = useState(false)
