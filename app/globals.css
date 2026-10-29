@@ -104,6 +104,10 @@ section[id] { scroll-margin-top: 110px; }
 .ad-marquee { grid-column: 1/-1; grid-row: 5; display: flex; align-items: center; position: relative; border-block: 1px solid #bfa4d537; padding: 14px 0; overflow: hidden; color: #c7b9df; font-family: Georgia,'PMingLiU','Noto Serif TC',serif; letter-spacing: .08em; font-size: 13px; }
 .ad-marquee > span { z-index: 1; background: #0a1227; color: #8f8bac; font: 8px 'Segoe UI',sans-serif; padding: 15px 15px 15px 0; position: absolute; left: 0; }
 .ad-marquee > p { white-space: nowrap; animation: ad-marquee 32s linear infinite; padding-left: 100%; }
+.ad-policy { grid-column: 1/-1; grid-row: 6; padding: 20px 24px; border: 1px solid #ae9cda33; border-radius: 14px; background: #211e3b77; }
+.ad-policy > p { color: #e2d1fa; font-size: 15px; font-weight: 600; }
+.ad-policy > span { display: block; color: #b8c2d7; font-size: 13px; line-height: 1.9; margin-top: 7px; }
+.ad-policy > a { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; color: #96dce9; font-size: 12px; }
 .ad-marquee:hover > p, .ad-marquee.paused > p { animation-play-state: paused; }
 @keyframes ad-marquee { to { transform: translateX(-100%); } }
 .cinema-empty { min-height: 320px; display: grid; place-content: center; gap: 15px; justify-items: center; border: 1px solid #b5bcda35; border-radius: 18px; color: #a6bad5; }
@@ -182,6 +186,7 @@ footer { padding-bottom: 190px; }
   .partner-contact { padding: 14px; }
   .film-description { grid-row: 5; padding: 20px; }
   .ad-marquee { grid-row: 6; }
+  .ad-policy { grid-row: 7; padding: 18px; }
   .film-heading { grid-row: 3; flex-direction: column; gap: 12px; padding-block: 0; }
   .film-strip { grid-row: 4; display: flex; overflow-x: auto; gap: 10px; padding-bottom: 8px; scroll-snap-type: x mandatory; }
   .film-choice { flex: 0 0 44%; scroll-snap-align: start; }
@@ -235,6 +240,7 @@ footer { padding-bottom: 190px; }
   .film-choice-title { font-size: 10px; padding: 6px; min-height: 44px; }
   .film-description { grid-row: 4; }
   .ad-marquee { grid-row: 5; }
+  .ad-policy { grid-row: 6; }
 }
 
 ::selection {

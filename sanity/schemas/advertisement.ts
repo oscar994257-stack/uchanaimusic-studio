@@ -28,7 +28,7 @@ export default defineType({
       if (!value || !context.document?.endsAt) return true
       return Date.parse(String(context.document.startsAt)) >= Date.parse(value) && Date.parse(String(context.document.endsAt)) <= calendarMonthsAfter(value, 3) || '本次區間必須在首次開始後三個月內'
     }) }),
-    defineField({ name: 'enabled', group: 'schedule', title: '啟用（確認合約與付款後才開啟）', type: 'boolean', initialValue: false }),
+    defineField({ name: 'enabled', group: 'schedule', title: '啟用（確認素材與刊登安排後開啟）', type: 'boolean', initialValue: false }),
   ],
   preview: { select: { title: 'title', media: 'image', slot: 'slot' }, prepare: ({ title, media, slot }) => ({ title, media, subtitle: `Placement ${slot || '—'}` }) },
 })

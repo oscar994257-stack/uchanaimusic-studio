@@ -86,6 +86,7 @@ export function FeaturedCinema({ works, ads = [], lang, email }: { works: Work[]
           </div>
         </>}
         {work && <div className="film-description" key={work._id || work.youtubeUrl}><p className="eyebrow">{ui(lang, 'details')}</p><p className="film-description-text">{work.description}</p><a href={safeHttpsUrl(work.youtubeUrl)} target="_blank" rel="noopener noreferrer">YouTube <ExternalLink size={14} /></a></div>}
+        <div className="ad-policy"><p>{ui(lang, 'adPolicyTitle')}</p><span>{ui(lang, 'adPolicy')}</span><a href={`mailto:${email}?subject=Free%20advertising%20collaboration`}>{ui(lang, 'adContact')}<ChevronRight size={15} /></a></div>
       </div>
     </section>
   )
@@ -121,5 +122,5 @@ export function CommissionPartner({ ads = [], lang, email }: { ads?: Advertiseme
   const now = useCurrentTime()
   const ad = ads.find(item => item.placement === 'commission' && Date.parse(item.startsAt) <= now && Date.parse(item.endsAt) > now)
   const href = safeHttpsUrl(ad?.targetUrl) || `mailto:${email}?subject=Advertising%20collaboration`
-  return <a className="commission-partner" href={href} target={ad ? '_blank' : undefined} rel={ad ? 'noopener noreferrer sponsored' : undefined}>{ad?.imageUrl && <img src={ad.imageUrl} alt={ad.title} loading="lazy" />}<div><p className="eyebrow">{ui(lang, 'ad')} / 06</p><h3>{ad?.title || ui(lang, 'commissionAd')}</h3><p>{ad?.description || ad?.caption || ui(lang, 'commissionAdText')}</p></div><span className="coming-mini">{ad ? 'AD' : 'Coming Soon'}</span></a>
+  return <a className="commission-partner" href={href} target={ad ? '_blank' : undefined} rel={ad ? 'noopener noreferrer sponsored' : undefined}>{ad?.imageUrl && <img src={ad.imageUrl} alt={ad.title} loading="lazy" />}<div><p className="eyebrow">{ui(lang, 'ad')} / 06</p><h3>{ad?.title || ui(lang, 'commissionAd')}</h3><p>{ad?.description || ad?.caption || ui(lang, 'commissionAdText')}</p></div><span className="coming-mini">{ad ? 'AD' : 'FREE'}</span></a>
 }

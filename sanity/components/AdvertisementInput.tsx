@@ -15,7 +15,7 @@ export function AdvertisementInput(props: ObjectInputProps) {
     <Card padding={4} radius={2} border>
       <Stack space={3}>
         <Text weight="semibold">素材預覽（草稿不會刊登到官網）</Text>
-        <Text size={1}>先填「廣告內容」並上傳圖片，即可在這裡檢查；要上線時，再設定「刊登設定」、開啟啟用並按 Publish。官網更新可能需約一分鐘，請重新整理查看。</Text>
+        <Text size={1}>目前廣告版位免費；未來收費將另行通知，不追溯收費。先填「廣告內容」並上傳圖片，即可在這裡檢查；要上線時，再設定「刊登設定」、開啟啟用並按 Publish。官網更新可能需約一分鐘，請重新整理查看。</Text>
         <div style={{ maxWidth: 360, margin: '0 auto', width: '100%', borderRadius: 14, overflow: 'hidden', background: '#151b30', color: '#ede6fa' }}>
           {imageUrl ? <img src={imageUrl} alt={image?.alt || title || '廣告素材預覽'} style={{ display: 'block', width: '100%', height: 240, objectFit: 'contain' }} /> : <div style={{ padding: '48px 20px', textAlign: 'center', color: '#bcb0d5' }}>上傳廣告主視覺</div>}
           <div style={{ padding: 18 }}><strong>{title || '廣告標題'}</strong><p style={{ fontSize: 13, lineHeight: 1.7, whiteSpace: 'pre-line', overflowWrap: 'anywhere' }}>{description || '這裡顯示廣告說明。'}</p></div>
