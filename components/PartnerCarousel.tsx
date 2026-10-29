@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
 import type { Advertisement } from '@/lib/types'
 import { showcaseAdvertisements } from '@/lib/advertisements'
-import { AD_TEXT_LIMITS, adCharacters, displayAdText } from '@/lib/ad-text'
+import { AD_TEXT_LIMITS, displayAdText } from '@/lib/ad-text'
 import { adAdvanceDelay, type AdVideoState } from '@/lib/ad-playback'
 import { extractYouTubeId } from '@/lib/youtube'
 import { safeHttpsUrl, ui } from '@/lib/site-copy'
@@ -85,6 +85,6 @@ export function PartnerCarousel({ ads, lang, email }: { ads: Advertisement[]; la
         </div><p className="ad-occupancy">{labels.occupied} <strong>{slots.length} / 4</strong><span> · {labels.available} <strong>{availableCount}</strong></span></p><p className="ad-rotation-status">{status}</p>
       </div>
     </aside>
-    <div className={`ad-marquee ${marqueePaused ? 'paused' : ''}`} aria-label={labels.note}><span>{labels.note}</span><p>{adCharacters(selected?.caption || ui(lang, 'adBanner')).slice(0, 100).join('')}</p><button className="ad-marquee-toggle" onClick={() => setMarqueePaused(value => !value)} aria-label={marqueePaused ? labels.resumeNote : labels.pauseNote} aria-pressed={marqueePaused}>{marqueePaused ? <Play size={16} /> : <Pause size={16} />}</button></div>
+    <div className={`ad-marquee ${marqueePaused ? 'paused' : ''}`} aria-label={labels.note}><span>{labels.note}</span><p>{ui(lang, 'adBanner')}</p><button className="ad-marquee-toggle" onClick={() => setMarqueePaused(value => !value)} aria-label={marqueePaused ? labels.resumeNote : labels.pauseNote} aria-pressed={marqueePaused}>{marqueePaused ? <Play size={16} /> : <Pause size={16} />}</button></div>
   </>
 }

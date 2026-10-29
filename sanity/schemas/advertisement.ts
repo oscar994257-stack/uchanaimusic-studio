@@ -1,6 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { calendarMonthsAfter } from '../../lib/ad-period'
-import { AD_TEXT_LIMITS, adCharacters, validateAdText } from '../../lib/ad-text'
+import { AD_TEXT_LIMITS, validateAdText } from '../../lib/ad-text'
 import { extractYouTubeId } from '../../lib/youtube'
 import { AdvertisementInput } from '../components/AdvertisementInput'
 import { AdAdvertiserInput, AdBodyInput, AdTitleInput } from '../components/AdTextInput'
@@ -21,7 +21,7 @@ export default defineType({
     defineField({ name: 'advertiserName', title: '第二行：廣告商名稱（最多 24 字）', group: 'content', type: 'string', description: '舊廣告請補填這一欄，再按 Publish。', components: { input: AdAdvertiserInput }, validation: rule => rule.required().custom(value => validateAdText(value, AD_TEXT_LIMITS.advertiser)) }),
     defineField({ name: 'description', title: '第三行起：廣告內文（每行 24 字，最多 3 行）', group: 'content', type: 'text', rows: 3, description: '空格不計字數，標點及 emoji 計入；每滿 24 字自動另起一行。可按 Enter 換行（換行不算字數，但占一行），最多三行、72 字；超過限制無法 Publish。', components: { input: AdBodyInput }, validation: rule => rule.custom(value => validateAdText(value, AD_TEXT_LIMITS.body)) }),
     defineField({ name: 'targetUrl', group: 'content', title: '了解更多：連結網址（選填 HTTPS）', type: 'url', description: '填寫後自動顯示可點擊的連結；只有 YouTube 類型會嵌入站內播放器。', validation: rule => rule.uri({ scheme: ['https'] }) }),
-    defineField({ name: 'caption', group: 'content', title: '獨立跑馬燈（選填，最多 100 字）', type: 'text', rows: 2, description: '這一欄顯示在作品區下方的跑馬燈，不是圖片下方的廣告內文。', validation: rule => rule.custom(value => !value || adCharacters(value).length <= 100 || '最多 100 字，含空格、標點及 emoji') }),
+    defineField({ name: 'caption', title: '舊版廣告跑馬燈（已停用）', type: 'text', hidden: true, readOnly: true, description: '保留歷史內容；官網跑馬燈改為工作室固定招募訊息。' }),
     defineField({ name: 'placement', group: 'schedule', title: '刊登區域', type: 'string', options: { list: [{ title: '作品旁四個廣告版位', value: 'showcase' }] }, initialValue: 'showcase', validation: rule => rule.required().custom(value => value === 'showcase' || '舊版位已停用，請改為作品旁廣告區並選 1–4') }),
     defineField({ name: 'slot', group: 'schedule', title: '廣告版位（共四個）', type: 'number', initialValue: 1, options: { list: [{ title: '01｜示範廣告', value: 1 }, { title: '02｜廣告合作', value: 2 }, { title: '03｜廣告合作', value: 3 }, { title: '04｜廣告合作', value: 4 }] }, validation: rule => rule.required().integer().min(1).max(4).custom(async (value, context) => {
       const doc = context.document

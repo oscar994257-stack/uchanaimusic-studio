@@ -18,7 +18,7 @@ export const publishedWorksQuery = `*[_type == "work"] | order(_createdAt desc, 
 }`
 
 export const publishedAdvertisementsQuery = `*[_type == "advertisement" && placement == "showcase" && slot >= 1 && slot <= 4 && enabled == true && dateTime(startsAt) <= dateTime(now()) && dateTime(endsAt) > dateTime(now())] | order(slot asc, _updatedAt desc, _id asc) {
-  _id, title, advertiserName, mediaType, youtubeUrl, placement, slot, caption, description, targetUrl, startsAt, endsAt, "imageUrl": image.asset->url, "imageAlt": image.alt
+  _id, title, advertiserName, mediaType, youtubeUrl, placement, slot, description, targetUrl, startsAt, endsAt, "imageUrl": image.asset->url, "imageAlt": image.alt
 }`
 
 const homeQuery = `{

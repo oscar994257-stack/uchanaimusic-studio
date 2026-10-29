@@ -6,7 +6,7 @@ import { type ObjectInputProps, useClient, useFormValue } from 'sanity'
 import { useEffect, useState } from 'react'
 import { safeHttpsUrl } from '../../lib/site-copy'
 import { getYouTubeThumbnail } from '../../lib/youtube'
-import { AD_TEXT_LIMITS, adCharacters, displayAdText } from '../../lib/ad-text'
+import { AD_TEXT_LIMITS, displayAdText } from '../../lib/ad-text'
 import { FitAdLine } from '../../components/FitAdLine'
 
 export function AdvertisementInput(props: ObjectInputProps) {
@@ -14,7 +14,6 @@ export function AdvertisementInput(props: ObjectInputProps) {
   const title = useFormValue(['title']) as string | undefined
   const advertiser = useFormValue(['advertiserName']) as string | undefined
   const description = useFormValue(['description']) as string | undefined
-  const caption = useFormValue(['caption']) as string | undefined
   const mediaType = useFormValue(['mediaType']) as string | undefined
   const youtubeUrl = useFormValue(['youtubeUrl']) as string | undefined
   const targetUrl = safeHttpsUrl(useFormValue(['targetUrl']) as string | undefined)
@@ -43,7 +42,6 @@ export function AdvertisementInput(props: ObjectInputProps) {
           </div>
           {targetUrl && <a href={targetUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'block', padding: 12, textAlign: 'center', color: '#9ddce7', fontSize: 13, borderTop: '1px solid #ffffff20' }}>了解更多 ↗</a>}
         </div>
-        {caption && <Text size={1}>獨立跑馬燈：{adCharacters(caption).slice(0, 100).join('')}</Text>}
       </Stack>
     </Card>
     {props.renderDefault(props)}
