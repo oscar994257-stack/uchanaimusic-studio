@@ -37,7 +37,7 @@ import { CommissionPartner, FeaturedCinema, PortalPreview } from './Showcase'
 import { CollaborationTerms } from './CollaborationTerms'
 import { ui } from '@/lib/site-copy'
 import { usePublishedWorks } from '@/lib/use-published-works'
-import { MobileOrientationHint } from './MobileOrientationHint'
+import { DisplayModeSwitch } from './DisplayModeSwitch'
 
 type Props = {
   data: HomeData
@@ -357,7 +357,7 @@ function MouseGlow() {
   )
 }
 
-function Navbar({ data, lang, setLang }: Props & { lang: LanguageCode; setLang: (lang: LanguageCode) => void }) {
+function Navbar({ data, lang, setLang, desktopMode }: Props & { lang: LanguageCode; setLang: (lang: LanguageCode) => void; desktopMode: boolean }) {
   const [scrolled, setScrolled] = useState(false)
   const settings = data.siteSettings
 
@@ -373,15 +373,16 @@ function Navbar({ data, lang, setLang }: Props & { lang: LanguageCode; setLang: 
       <nav className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-y-3 px-4 py-4 lg:px-8">
         <a href="#home" className="flex items-center gap-3 text-lg font-bold tracking-wide text-white">
           <Sparkles className="h-6 w-6 text-cosmic-pink" />
-          <span className="hidden sm:inline">UchanAIMusic Studio</span>
-          <span className="sm:hidden">UchanAI</span>
+          <span className="desktop-brand-full hidden sm:inline">UchanAIMusic Studio</span>
+          <span className="desktop-brand-short sm:hidden">UchanAI</span>
         </a>
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="desktop-navbar-links hidden items-center gap-2 lg:flex">
           {nav.map(([labelKey, href]) => (
             <a key={labelKey} href={href} className="rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide text-blue-100/[.82] transition hover:bg-white/10 hover:text-white">
               {text(lang, labelKey)}
             </a>
           ))}
+          <DisplayModeSwitch desktopMode={desktopMode} lang={lang} />
         </div>
         <div className="flex items-center gap-2">
           <LanguagePicker lang={lang} setLang={setLang} />
@@ -397,7 +398,7 @@ function Navbar({ data, lang, setLang }: Props & { lang: LanguageCode; setLang: 
             <Mail className="h-5 w-5" />
           </a>
         </div>
-        <div className="mobile-nav">{nav.map(([key, href]) => <a href={href} key={key}>{text(lang, key)}</a>)}</div>
+        <div className="mobile-nav"><DisplayModeSwitch desktopMode={desktopMode} lang={lang} />{nav.map(([key, href]) => <a href={href} key={key}>{text(lang, key)}</a>)}</div>
       </nav>
     </header>
   )
@@ -493,7 +494,7 @@ function QuickLinks({ data, lang }: Props & { lang: LanguageCode }) {
 
   return (
     <div className="relative z-20 mx-auto max-w-6xl px-4 pb-12">
-      <div className="glass-panel aurora-border grid grid-cols-2 gap-px rounded-2xl p-2 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="quick-links-layout glass-panel aurora-border grid grid-cols-2 gap-px rounded-2xl p-2 sm:grid-cols-3 lg:grid-cols-6">
         {items.map(([title, subKey, Icon, href]) => (
           <a key={title} href={href || '#'} target={href?.startsWith('http') ? '_blank' : undefined} className="group flex items-center gap-3 rounded-xl px-4 py-4 transition hover:bg-white/10">
             <Icon className="h-6 w-6 text-cosmic-cyan transition group-hover:text-cosmic-pink" />
@@ -662,7 +663,7 @@ function Footer({ data, lang }: Props & { lang: LanguageCode }) {
 
   return (
     <footer className="border-t border-white/10 bg-cosmic-ink/60">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 md:grid-cols-[1.2fr_1fr_1fr_1fr] lg:px-8">
+      <div className="footer-layout mx-auto grid max-w-7xl gap-8 px-4 py-10 md:grid-cols-[1.2fr_1fr_1fr_1fr] lg:px-8">
         <div>
           <div className="flex items-center gap-3">
             <Image src="/images/UchanAIMusic(2).png" alt="UchanAIMusic" width={64} height={64} className="rounded-full border border-cosmic-cyan/30" />
@@ -854,7 +855,7 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
   )
 }
 
-export default function HomePage({ data: sourceData }: Props) {
+export default function HomePage({ data: sourceData, desktopMode = false }: Props & { desktopMode?: boolean }) {
   const [lang, setLang] = useState<LanguageCode>('zh')
   const [translation, setTranslation] = useState<{ lang: string; data: HomeData; mode: string } | null>(null)
   const [loadingTranslation, setLoadingTranslation] = useState(false)
@@ -875,10 +876,9 @@ export default function HomePage({ data: sourceData }: Props) {
   }, [lang, sourceData])
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <main className={`${desktopMode ? 'desktop-view-page ' : ''}relative min-h-screen overflow-hidden`}>
       <MouseGlow />
-      <Navbar data={data} lang={lang} setLang={setLang} />
-      <MobileOrientationHint lang={lang} />
+      <Navbar data={data} lang={lang} setLang={setLang} desktopMode={desktopMode} />
       <PortalPreview lang={lang} />
       {lang !== 'zh' && <p className="translation-status content-shell" role="status">{ui(lang, loadingTranslation ? 'translating' : translation?.mode === 'automatic' ? 'translated' : 'translation')}</p>}
       <Hero data={data} lang={lang} />
