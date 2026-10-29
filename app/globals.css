@@ -139,6 +139,16 @@ section[id] { scroll-margin-top: 110px; }
 .visitor-notes { color: #7f91a9; font-size: 10px; line-height: 1.9; }
 .visitor-notes details { margin-top: 8px; }
 footer { padding-bottom: 190px; }
+.mobile-orientation-hint { display: none; }
+@media (max-width: 767px) and (orientation: portrait) {
+  .mobile-orientation-hint { display: flex; align-items: flex-start; gap: 12px; position: fixed; z-index: 60; top: calc(116px + env(safe-area-inset-top, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); max-width: 480px; margin-inline: auto; padding: 18px 38px 16px 16px; border: 1px solid #b4a2ed66; border-radius: 18px; background: linear-gradient(125deg,#252044f5,#0e2038f5); box-shadow: 0 18px 60px #0009; backdrop-filter: blur(16px); }
+  .orientation-symbol { position: relative; flex-shrink: 0; color: #b9d8ff; padding: 4px 6px 4px 0; }
+  .orientation-symbol > svg:last-child { position: absolute; right: -3px; bottom: 0; color: #d2b8ff; }
+  .mobile-orientation-hint p { font-weight: 700; font-size: 15px; line-height: 1.6; }
+  .mobile-orientation-hint span { display: block; font-size: 12px; line-height: 1.7; color: #b9c8df; margin-top: 4px; }
+  .mobile-orientation-hint button:not(.orientation-close) { min-height: 36px; margin-top: 7px; font-size: 12px; text-decoration: underline; text-underline-offset: 4px; color: #b8e8f2; }
+  .orientation-close { position: absolute; right: 4px; top: 4px; width: 36px; height: 36px; display: grid; place-items: center; color: #c8c6e1; }
+}
 @media (max-width: 1023px) {
   .mobile-nav { display: flex; flex-basis: 100%; overflow-x: auto; gap: 20px; white-space: nowrap; font-size: 11px; color: #b4c0d9; padding-top: 5px; scrollbar-width: none; }
   .portal-preview { margin-top: 145px; grid-template-columns: 125px 1fr; padding: 26px; }
@@ -185,6 +195,46 @@ footer { padding-bottom: 190px; }
   .visitor-grid > div:nth-child(3) { border: 0; padding-left: 0; }
   .visitor-grid dd { font-size: 32px; }
   .visitor-section { padding-block: 46px; }
+}
+
+/* Short landscape screens keep the desktop column structure, even below 768px. */
+@media (max-width: 1023px) and (max-height: 600px) and (orientation: landscape) {
+  .background-music-player[class] { left: auto; right: max(8px, env(safe-area-inset-right, 0px)); bottom: 8px; width: 290px; max-width: calc(100% - 16px); padding: 8px; }
+  .background-music-player > .flex:first-of-type > .grid:first-child { display: none; }
+  .background-music-player > .flex:first-of-type > .flex-1 > button { display: none; }
+  .background-music-player > .mt-3 { margin-top: 6px; }
+  .background-music-player > .mt-3 > button { padding-block: 4px; }
+  .background-music-player .max-h-44 { max-height: 80px; }
+  .hero-layout { grid-template-columns: minmax(0,.98fr) minmax(0,1.02fr); gap: 24px; }
+  .hero-portrait { order: 1; min-width: 0; }
+  .hero-copy { order: 2; min-width: 0; }
+  .hero-copy h1 { font-size: clamp(32px,5.2vw,52px); overflow-wrap: anywhere; }
+  .hero-copy > p { font-size: 18px; }
+  .subtitle-layout, .services-layout, .store-layout { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; }
+  .subtitle-layout { padding: 24px; }
+  .services-layout > *, .store-layout > *, .subtitle-layout > * { min-width: 0; }
+  .content-shell { width: calc(100% - 40px); }
+  .section-space { padding-block: 42px; }
+  .cinema-layout { grid-template-columns: minmax(0,7fr) minmax(0,3fr); gap: 16px; }
+  .partner-showcase { grid-column: 2; grid-row: 1; height: auto; }
+  .partner-portrait { flex: 1; height: auto; min-height: 0; }
+  .partner-header { padding: 8px 10px; font-size: 10px; }
+  .partner-copy { padding: 6px 10px 0; }
+  .partner-title { font-size: 12px; -webkit-line-clamp: 1; }
+  .partner-description { font-size: 11px; -webkit-line-clamp: 1; }
+  .partner-contact { padding: 8px; font-size: 11px; }
+  .ad-placeholder { padding: 26px 10px 10px; gap: 4px; }
+  .ad-placeholder > p { font-size: 14px; line-height: 1.6; }
+  .ad-sigil { font-size: 28px; }
+  .ad-coordinate { top: 8px; left: 10px; font-size: 6px; }
+  .ad-dots { gap: 1px; padding: 2px 0; }
+  .ad-dots button { min-width: 28px; }
+  .film-heading { grid-row: 2; flex-direction: row; align-items: center; }
+  .film-strip { grid-row: 3; display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); overflow: visible; gap: 8px; padding-bottom: 0; }
+  .film-choice { min-width: 0; }
+  .film-choice-title { font-size: 10px; padding: 6px; min-height: 44px; }
+  .film-description { grid-row: 4; }
+  .ad-marquee { grid-row: 5; }
 }
 
 ::selection {

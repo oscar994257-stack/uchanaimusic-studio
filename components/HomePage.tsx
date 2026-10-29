@@ -37,6 +37,7 @@ import { CommissionPartner, FeaturedCinema, PortalPreview } from './Showcase'
 import { CollaborationTerms } from './CollaborationTerms'
 import { ui } from '@/lib/site-copy'
 import { usePublishedWorks } from '@/lib/use-published-works'
+import { MobileOrientationHint } from './MobileOrientationHint'
 
 type Props = {
   data: HomeData
@@ -429,14 +430,14 @@ function Hero({ data, lang }: Props & { lang: LanguageCode }) {
     <section id="home" className="star-scroll relative overflow-hidden py-12">
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,8,22,.12),rgba(3,8,22,.68)_55%,rgba(3,8,22,.32))]" />
       <div className="absolute bottom-24 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cosmic-cyan/60 to-transparent neon-line" />
-      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-8 px-4 pb-14 pt-8 md:grid-cols-[.98fr_1.02fr] lg:px-8">
-        <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: .8 }} className="relative order-2 md:order-1">
+      <div className="hero-layout relative z-10 mx-auto grid max-w-7xl items-center gap-8 px-4 pb-14 pt-8 md:grid-cols-[.98fr_1.02fr] lg:px-8">
+        <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: .8 }} className="hero-portrait relative order-2 md:order-1">
           <div className="floaty relative mx-auto aspect-square max-w-[360px] overflow-hidden rounded-full border border-cosmic-cyan/30 bg-cosmic-glass shadow-neon">
             <Image src={hero.heroImageUrl || '/images/UchanAIMusic(2).png'} alt="UchanAIMusic avatar" fill priority className="object-cover" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_22%,rgba(255,255,255,.18),transparent_34%),linear-gradient(180deg,transparent,rgba(3,8,22,.24))]" />
           </div>
         </motion.div>
-        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8, delay: .12 }} className="order-1 md:order-2">
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8, delay: .12 }} className="hero-copy order-1 md:order-2">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cosmic-cyan/30 bg-white/[.08] px-4 py-2 text-sm text-cosmic-cyan shadow-neon backdrop-blur">
             <Disc3 className="h-4 w-4 animate-spin [animation-duration:8s]" />
             {text(lang, 'heroBadge')}
@@ -527,7 +528,7 @@ function SubtitleStudio({ data, lang }: Props & { lang: LanguageCode }) {
   const studio = data.subtitleStudio
   return (
     <MotionSection id="subtitle-studio" className="mx-auto max-w-7xl px-4 py-10 lg:px-8">
-      <div className="glass-panel aurora-border grid gap-8 overflow-hidden rounded-3xl p-7 md:grid-cols-[1fr_.95fr] md:p-10">
+      <div className="subtitle-layout glass-panel aurora-border grid gap-8 overflow-hidden rounded-3xl p-7 md:grid-cols-[1fr_.95fr] md:p-10">
         <div>
           <p className="text-sm font-bold uppercase tracking-[.22em] text-cosmic-cyan">{text(lang, 'featuredTool')}</p>
           <h2 className="mt-3 text-4xl font-black text-white">{localized(studio.titleI18n, lang, studio.title)}</h2>
@@ -564,7 +565,7 @@ function SubtitleStudio({ data, lang }: Props & { lang: LanguageCode }) {
 
 function ToolsAndServices({ data, lang }: Props & { lang: LanguageCode }) {
   return (
-    <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 lg:grid-cols-2 lg:px-8">
+    <div className="services-layout mx-auto grid max-w-7xl gap-8 px-4 py-10 lg:grid-cols-2 lg:px-8">
       <MotionSection id="commission" className="glass-panel aurora-border rounded-3xl p-7">
         <SectionTitle kicker={text(lang, 'commission')} title={text(lang, 'servicesTitle')} />
         <div className="grid gap-3">
@@ -620,7 +621,7 @@ function ToolCard({ tool, lang }: { tool: ToolItem; lang: LanguageCode }) {
 function StoreAboutContact({ data, lang }: Props & { lang: LanguageCode }) {
   const contact = data.contact
   return (
-    <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 lg:grid-cols-[1fr_.9fr] lg:px-8">
+    <div className="store-layout mx-auto grid max-w-7xl gap-8 px-4 py-10 lg:grid-cols-[1fr_.9fr] lg:px-8">
       <MotionSection id="store" className="glass-panel aurora-border rounded-3xl p-7">
         <SectionTitle kicker={text(lang, 'store')} title={text(lang, 'storeTitle')} />
         <div className="grid gap-4">
@@ -781,7 +782,7 @@ function BackgroundMusicPlayer({ tracks, lang }: { tracks: BackgroundMusicTrack[
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-xl rounded-2xl border border-cosmic-cyan/25 bg-cosmic-ink/85 p-3 text-white shadow-neon backdrop-blur-xl md:left-auto md:mx-0 md:w-[420px]">
+    <div className="background-music-player fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-xl rounded-2xl border border-cosmic-cyan/25 bg-cosmic-ink/85 p-3 text-white shadow-neon backdrop-blur-xl md:left-auto md:mx-0 md:w-[420px]">
       <audio ref={audioRef} onEnded={next} preload="auto" />
       <div className="flex items-center gap-3">
         <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-cosmic-pink/30 bg-white/[.06]">
@@ -877,6 +878,7 @@ export default function HomePage({ data: sourceData }: Props) {
     <main className="relative min-h-screen overflow-hidden">
       <MouseGlow />
       <Navbar data={data} lang={lang} setLang={setLang} />
+      <MobileOrientationHint lang={lang} />
       <PortalPreview lang={lang} />
       {lang !== 'zh' && <p className="translation-status content-shell" role="status">{ui(lang, loadingTranslation ? 'translating' : translation?.mode === 'automatic' ? 'translated' : 'translation')}</p>}
       <Hero data={data} lang={lang} />
