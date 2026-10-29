@@ -29,7 +29,15 @@ const flush = () => new Promise(setImmediate);
   assert.notEqual(text.validateAdText('🎃'.repeat(73), limits.body), true);
   assert.notEqual(text.validateAdText('一\n二\n三\n四', limits.body), true);
   assert.equal(text.adTextLines('x'.repeat(24) + '\r\ny\rz').length, 3);
-  assert.notEqual(text.validateAdText('x'.repeat(23) + ' 🎃'.repeat(25), limits.body), true, 'spaces count too');
+  assert.equal(text.validateAdText('x'.repeat(23) + ' 🎃'.repeat(25), limits.body), true, 'spaces do not consume the character budget');
+  assert.equal(text.validateAdText(' 字 '.repeat(20), limits.title), true);
+  assert.equal(text.validateAdText('字\t\u3000'.repeat(24), limits.advertiser), true);
+  const spaced = ' 字 🎃 '.repeat(36)
+  assert.equal(text.adTextLength(spaced), 72);
+  assert.equal(text.adTextLines(spaced).length, 3);
+  assert.equal(text.adTextLines(spaced).join(''), spaced, 'preserve all original spaces');
+  assert.notEqual(text.validateAdText(spaced + '！', limits.body), true, 'punctuation still counts');
+  assert.equal(text.adTextLines('字'.repeat(24) + '   ').length, 1, 'trailing spaces do not create a new line');
   assert.equal(text.displayAdText('字'.repeat(80), limits.body).length, 3);
   assert.equal(text.adCharacters(text.displayAdText('字'.repeat(80), limits.body)[2]).length, 24);
   console.log('PASS: title/name/body limits, punctuation/spaces, ZWJ emoji, flags, combining marks, CRLF and legacy overflow.');

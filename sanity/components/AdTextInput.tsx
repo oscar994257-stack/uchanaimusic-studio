@@ -2,12 +2,12 @@
 
 import { Stack, Text } from '@sanity/ui'
 import type { StringInputProps, TextInputProps } from 'sanity'
-import { AD_TEXT_LIMITS, adCharacters, adTextLines, validateAdText } from '../../lib/ad-text'
+import { AD_TEXT_LIMITS, adTextLength, adTextLines, validateAdText } from '../../lib/ad-text'
 
 function Counter({ value, limit }: { value?: string; limit: { columns: number; rows: number } }) {
   const lines = adTextLines(value, limit.columns)
   const validation = validateAdText(value, limit)
-  return <Text size={1} muted={validation === true} style={validation === true ? undefined : { color: '#e85d75' }}>{validation === true ? `${lines.map((line, index) => `第 ${index + 1} 行 ${adCharacters(line).length}/${limit.columns} 字`).join(' · ')}；最多 ${limit.rows} 行（含空格、標點、emoji）` : validation}</Text>
+  return <Text size={1} muted={validation === true} style={validation === true ? undefined : { color: '#e85d75' }}>{validation === true ? `${lines.map((line, index) => `第 ${index + 1} 行 ${adTextLength(line)}/${limit.columns} 字`).join(' · ')}；最多 ${limit.rows} 行（空格不計，標點、emoji 計入；換行占一行）` : validation}</Text>
 }
 
 export function AdTitleInput(props: StringInputProps) {
