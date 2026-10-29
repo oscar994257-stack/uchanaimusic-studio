@@ -132,6 +132,8 @@ body:has(.desktop-view-page) { min-width: 1280px; overflow-x: auto; }
 .ad-requirements ul { padding-left: 17px; list-style: disc; }
 .ad-requirements li, .ad-requirements p { font-size: 12px; line-height: 1.9; color: #b8c2d7; overflow-wrap: anywhere; }
 .ad-requirements p { margin-top: 6px; color: #9baac3; }
+.ad-disclosure { margin-top: 18px; padding-top: 15px; border-top: 1px solid #ae9cda22; }
+.ad-disclosure a { color: #96dce9; white-space: nowrap; }
 .ad-marquee:hover > p, .ad-marquee.paused > p { animation-play-state: paused; }
 @keyframes ad-marquee { to { transform: translateX(-100%); } }
 .cinema-empty { min-height: 320px; display: grid; place-content: center; gap: 15px; justify-items: center; border: 1px solid #b5bcda35; border-radius: 18px; color: #a6bad5; }
