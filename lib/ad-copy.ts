@@ -6,3 +6,12 @@ const copy = {
   ko: { previous: '이전 광고', next: '다음 광고', partner: '광고 파트너', demo: '예시', single: '광고 1개 고정 표시', auto: '5초마다 전환 · 직접 선택 가능', paused: '자동 전환 일시 정지', watching: '시청 중에는 현재 광고 유지', ended: '영상 종료 · 10초 후 전환', loading: 'YouTube 로딩 중…', unavailable: '영상을 재생할 수 없습니다', open: 'YouTube에서 보기', videoHint: '직접 재생하세요. 시청 중에는 전환하지 않으며 종료 10초 후 다음 광고로 이동합니다.' },
 }
 export function adCopy(lang: string) { return copy[lang as keyof typeof copy] || copy.en }
+
+const placementCopy = {
+  zh: { placement: '版位', occupied: '已使用', available: '可洽詢空位', open: '空位', shown: '刊登中', reserved: '示範預留', empty: '開放廣告合作，歡迎洽詢', note: '合作訊息', pauseNote: '暫停跑馬燈', resumeNote: '繼續跑馬燈' },
+  'zh-CN': { placement: '版位', occupied: '已使用', available: '可咨询空位', open: '空位', shown: '刊登中', reserved: '示范预留', empty: '开放广告合作，欢迎咨询', note: '合作消息', pauseNote: '暂停跑马灯', resumeNote: '继续跑马灯' },
+  en: { placement: 'Placement', occupied: 'In use', available: 'Open partner slots', open: 'Open', shown: 'Live', reserved: 'Demo reserved', empty: 'Partner placements available · get in touch', note: 'Partner note', pauseNote: 'Pause scrolling message', resumeNote: 'Resume scrolling message' },
+  ja: { placement: '広告枠', occupied: '掲載中', available: '募集中の枠', open: '空き', shown: '掲載中', reserved: '見本用', empty: '広告掲載を受付中・お問い合わせください', note: '提携のお知らせ', pauseNote: 'テロップを停止', resumeNote: 'テロップを再開' },
+  ko: { placement: '광고 공간', occupied: '사용 중', available: '신청 가능 공간', open: '빈자리', shown: '게재 중', reserved: '예시 전용', empty: '광고 파트너를 모집합니다 · 문의해 주세요', note: '파트너 소식', pauseNote: '흐르는 문구 일시 정지', resumeNote: '흐르는 문구 다시 재생' },
+}
+export function adPlacementCopy(lang: string) { return placementCopy[lang as keyof typeof placementCopy] || placementCopy.en }
