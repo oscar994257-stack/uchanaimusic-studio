@@ -17,6 +17,10 @@ export const publishedWorksQuery = `*[_type == "work"] | order(_createdAt desc, 
   _id, title, titleI18n, type, typeI18n, category, categoryI18n, description, descriptionI18n, youtubeUrl
 }`
 
+export const publishedAdvertisementsQuery = `*[_type == "advertisement" && placement == "showcase" && slot >= 1 && slot <= 4 && enabled == true && dateTime(startsAt) <= dateTime(now()) && dateTime(endsAt) > dateTime(now())] | order(slot asc, _updatedAt desc, _id asc) {
+  _id, title, advertiserName, mediaType, youtubeUrl, placement, slot, caption, description, targetUrl, startsAt, endsAt, "imageUrl": image.asset->url, "imageAlt": image.alt
+}`
+
 const homeQuery = `{
   "siteSettings": *[_type == "siteSettings"][0],
   "hero": *[_type == "hero"][0]{
@@ -38,9 +42,7 @@ const homeQuery = `{
   },
   "about": *[_type == "about"][0]{zh, en, bodyI18n},
   "contact": *[_type == "contact"][0],
-  "advertisements": *[_type == "advertisement" && enabled == true && dateTime(startsAt) <= dateTime(now()) && dateTime(endsAt) > dateTime(now())] | order(slot asc, _updatedAt desc) {
-    _id, title, placement, slot, caption, description, targetUrl, startsAt, endsAt, "imageUrl": image.asset->url, "imageAlt": image.alt
-  }
+  "advertisements": ${publishedAdvertisementsQuery}
   ,
   "backgroundMusic": *[_type == "backgroundMusic" && enabled == true] | order(coalesce(order, 999) asc) {
     trackTitle,

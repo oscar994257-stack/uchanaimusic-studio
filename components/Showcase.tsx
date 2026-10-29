@@ -1,16 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight, ExternalLink, Pause, Play, Sparkles } from 'lucide-react'
+import { useState } from 'react'
+import { ChevronLeft, ChevronRight, ExternalLink, Play, Sparkles } from 'lucide-react'
 import type { Advertisement, Work } from '@/lib/types'
 import { extractYouTubeId, getYouTubeThumbnail } from '@/lib/youtube'
 import { safeHttpsUrl, ui } from '@/lib/site-copy'
-
-function useCurrentTime() {
-  const [now, setNow] = useState(0)
-  useEffect(() => { setNow(Date.now()); const timer = window.setInterval(() => setNow(Date.now()), 60000); return () => window.clearInterval(timer) }, [])
-  return now
-}
+import { PartnerCarousel } from './PartnerCarousel'
 
 export function PortalPreview({ lang }: { lang: string }) {
   return (
@@ -77,50 +72,19 @@ export function FeaturedCinema({ works, ads = [], lang, email }: { works: Work[]
       <div className="cinema-layout">
         <div className="cinema-main">
           {work ? <VideoPlayer key={playbackKey(work)} work={work} lang={lang} active={playingId === playbackKey(work)} start={start} /> : <div className="cinema-empty"><Sparkles /><p>{ui(lang, 'videoEmpty')}</p></div>}
+          {work && <div className="film-heading"><div><p className="eyebrow">{work.type || work.category || 'AI ANIME MV'}</p><h3>{work.title}</h3></div><div className="film-navigation"><button onClick={() => select(currentIndex - 1)} aria-label={ui(lang, 'previous')} disabled={available.length < 2}><ChevronLeft /></button><span>{currentIndex + 1} / {available.length}</span><button onClick={() => select(currentIndex + 1)} aria-label={ui(lang, 'next')} disabled={available.length < 2}><ChevronRight /></button></div></div>}
+        {work && <div className="film-description" key={work._id || work.youtubeUrl}><p className="eyebrow">{ui(lang, 'details')}</p><p className="film-description-text">{work.description}</p><a href={safeHttpsUrl(work.youtubeUrl)} target="_blank" rel="noopener noreferrer">YouTube <ExternalLink size={14} /></a></div>}
         </div>
         <PartnerCarousel ads={ads} lang={lang} email={email} />
         {work && <>
-          <div className="film-heading"><div><p className="eyebrow">{work.type || work.category || 'AI ANIME MV'}</p><h3>{work.title}</h3></div><div className="film-navigation"><button onClick={() => select(currentIndex - 1)} aria-label={ui(lang, 'previous')} disabled={available.length < 2}><ChevronLeft /></button><span>{currentIndex + 1} / {available.length}</span><button onClick={() => select(currentIndex + 1)} aria-label={ui(lang, 'next')} disabled={available.length < 2}><ChevronRight /></button></div></div>
+
           <div className="film-strip" role="group" aria-label={ui(lang, 'cinema')}>
             {available.map((item, index) => <button key={item._id || item.youtubeUrl} className={index === currentIndex ? 'film-choice is-selected' : 'film-choice'} onClick={() => select(index, true)} aria-pressed={index === currentIndex} aria-label={`${index + 1}. ${item.title}`}><Thumbnail key={item.youtubeUrl} work={item} /><span className="film-number">0{index + 1}</span><span className="film-choice-title">{item.title}</span></button>)}
           </div>
         </>}
-        {work && <div className="film-description" key={work._id || work.youtubeUrl}><p className="eyebrow">{ui(lang, 'details')}</p><p className="film-description-text">{work.description}</p><a href={safeHttpsUrl(work.youtubeUrl)} target="_blank" rel="noopener noreferrer">YouTube <ExternalLink size={14} /></a></div>}
+
         <div className="ad-policy"><p>{ui(lang, 'adPolicyTitle')}</p><span>{ui(lang, 'adPolicy')}</span><a href={`mailto:${email}?subject=Free%20advertising%20collaboration`}>{ui(lang, 'adContact')}<ChevronRight size={15} /></a></div>
       </div>
     </section>
   )
-}
-
-function PartnerCarousel({ ads, lang, email }: { ads: Advertisement[]; lang: string; email: string }) {
-  const now = useCurrentTime()
-  const slots = Array.from({ length: 5 }, (_, index) => ads.find(ad => ad.placement === 'showcase' && ad.slot === index + 1 && Date.parse(ad.startsAt) <= now && Date.parse(ad.endsAt) > now))
-  const [index, setIndex] = useState(0)
-  const [paused, setPaused] = useState(false)
-  const region = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (paused || reduced.matches) return
-    const timer = window.setInterval(() => { if (!region.current?.contains(document.activeElement)) setIndex(value => (value + 1) % 5) }, 8000)
-    return () => window.clearInterval(timer)
-  }, [paused])
-  const selected = slots[index]
-  const target = safeHttpsUrl(selected?.targetUrl)
-  const portrait = <>{selected?.imageUrl ? <img src={selected.imageUrl} alt={selected.imageAlt || selected.title} loading="lazy" /> : <div className="ad-placeholder"><span className="ad-coordinate">PARTNER SPACE / 0{index + 1}</span><div className="ad-sigil" aria-hidden="true">✦</div><p>{ui(lang, 'adTitle')}</p></div>}</>
-  return (
-    <><aside className="partner-showcase" ref={region} aria-label={ui(lang, 'ad')}>
-      <div className="partner-header"><span>{selected ? 'AD / ' + selected.title : ui(lang, 'ad')}</span><button onClick={() => setPaused(value => !value)} aria-label={ui(lang, paused ? 'adResume' : 'adPause')}>{paused ? <Play size={15} /> : <Pause size={15} />}</button></div>
-      {target ? <a className="partner-portrait" href={target} target="_blank" rel="noopener noreferrer sponsored">{portrait}</a> : <div className="partner-portrait">{portrait}</div>}
-      {selected && <div className="partner-copy"><p className="partner-title">{selected.title}</p>{selected.description && <p className="partner-description">{selected.description}</p>}</div>}
-      <div className="ad-dots" role="group" aria-label={ui(lang, 'adHint')}>{slots.map((_, item) => <button key={item} onClick={() => setIndex(item)} aria-label={`${ui(lang, 'ad')} ${item + 1}`} aria-pressed={index === item} className={index === item ? 'active' : ''} />)}</div>
-      <a className="partner-contact" href={target || `mailto:${email}?subject=Advertising%20collaboration`} target={target ? '_blank' : undefined} rel={target ? 'noopener noreferrer sponsored' : undefined}>{ui(lang, target ? 'adVisit' : 'adContact')}<ChevronRight size={15} /></a>
-    </aside><div className={`ad-marquee ${paused ? 'paused' : ''}`}><span>PARTNER NOTE</span><p>{Array.from(selected?.caption || ui(lang, 'adBanner')).slice(0, 100).join('')}</p></div></>
-  )
-}
-
-export function CommissionPartner({ ads = [], lang, email }: { ads?: Advertisement[]; lang: string; email: string }) {
-  const now = useCurrentTime()
-  const ad = ads.find(item => item.placement === 'commission' && Date.parse(item.startsAt) <= now && Date.parse(item.endsAt) > now)
-  const href = safeHttpsUrl(ad?.targetUrl) || `mailto:${email}?subject=Advertising%20collaboration`
-  return <a className="commission-partner" href={href} target={ad ? '_blank' : undefined} rel={ad ? 'noopener noreferrer sponsored' : undefined}>{ad?.imageUrl && <img src={ad.imageUrl} alt={ad.title} loading="lazy" />}<div><p className="eyebrow">{ui(lang, 'ad')} / 06</p><h3>{ad?.title || ui(lang, 'commissionAd')}</h3><p>{ad?.description || ad?.caption || ui(lang, 'commissionAdText')}</p></div><span className="coming-mini">{ad ? 'AD' : 'FREE'}</span></a>
 }

@@ -33,12 +33,13 @@ import {
 import type { BackgroundMusicTrack, HomeData, Service, ToolItem } from '@/lib/types'
 import { extractYouTubeId, getYouTubeThumbnail } from '@/lib/youtube'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { CommissionPartner, FeaturedCinema, PortalPreview } from './Showcase'
+import { FeaturedCinema, PortalPreview } from './Showcase'
 import { CollaborationTerms } from './CollaborationTerms'
 import { ui } from '@/lib/site-copy'
 import { usePublishedWorks } from '@/lib/use-published-works'
 import { DisplayModeNotice, DisplayModeSwitch } from './DisplayModeSwitch'
 import { useDisplayModeHistory } from '@/lib/use-display-mode-history'
+import { usePublishedAdvertisements } from '@/lib/use-published-advertisements'
 
 type Props = {
   data: HomeData
@@ -575,7 +576,6 @@ function ToolsAndServices({ data, lang }: Props & { lang: LanguageCode }) {
           {data.services.map((service) => <ServiceRow key={service.serviceName} service={service} lang={lang} />)}
         </div>
         <a href="#collaboration-terms" className="terms-link">{ui(lang, 'terms')} <ChevronRight size={16} /></a>
-        <CommissionPartner ads={data.advertisements} lang={lang} email={data.siteSettings.email || 'oscar994257@gmail.com'} />
       </MotionSection>
       <MotionSection id="tools" className="glass-panel aurora-border rounded-3xl p-7">
         <SectionTitle kicker={text(lang, 'tools')} title={text(lang, 'toolsTitle')} />
@@ -862,7 +862,9 @@ export default function HomePage({ data: sourceData, desktopMode = false }: Prop
   const [lang, setLang] = useState<LanguageCode>('zh')
   const [translation, setTranslation] = useState<{ lang: string; data: HomeData; mode: string } | null>(null)
   const [loadingTranslation, setLoadingTranslation] = useState(false)
-  const data = translation?.lang === lang ? translation.data : sourceData
+  const baseData = translation?.lang === lang ? translation.data : sourceData
+  const advertisements = usePublishedAdvertisements(sourceData.advertisements || [], lang)
+  const data = { ...baseData, advertisements }
   const publishedWorks = usePublishedWorks(data.works, lang)
 
   useEffect(() => {

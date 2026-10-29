@@ -128,6 +128,9 @@ export type Advertisement = {
   placement: 'showcase' | 'commission'
   slot: number
   title: string
+  advertiserName?: string
+  mediaType?: 'image' | 'youtube'
+  youtubeUrl?: string
   caption?: string
   description?: string
   imageAlt?: string
