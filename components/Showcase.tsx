@@ -6,6 +6,7 @@ import type { Advertisement, Work } from '@/lib/types'
 import { extractYouTubeId, getYouTubeThumbnail } from '@/lib/youtube'
 import { safeHttpsUrl, ui } from '@/lib/site-copy'
 import { PartnerCarousel } from './PartnerCarousel'
+import { AdvertisementRequirements } from './AdvertisementRequirements'
 
 export function PortalPreview({ lang }: { lang: string }) {
   return (
@@ -83,7 +84,7 @@ export function FeaturedCinema({ works, ads = [], lang, email }: { works: Work[]
           </div>
         </>}
 
-        <div className="ad-policy"><p>{ui(lang, 'adPolicyTitle')}</p><span>{ui(lang, 'adPolicy')}</span><a href={`mailto:${email}?subject=Free%20advertising%20collaboration`}>{ui(lang, 'adContact')}<ChevronRight size={15} /></a></div>
+        <div className="ad-policy"><p>{ui(lang, 'adPolicyTitle')}</p><span>{ui(lang, 'adPolicy')}</span><AdvertisementRequirements lang={lang} /><a href={`mailto:${email}?subject=Free%20advertising%20collaboration`}>{ui(lang, 'adContact')}<ChevronRight size={15} /></a></div>
       </div>
     </section>
   )
